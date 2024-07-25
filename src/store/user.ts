@@ -1,6 +1,7 @@
 import { createSlice, GetState, PayloadAction } from '@reduxjs/toolkit'
 import { State, Dispatch } from './index'
-import api, { User } from '@/api'
+import api from '@/api'
+import { User } from '@/api/interface'
 
 export interface InitialState {
   user: User | null

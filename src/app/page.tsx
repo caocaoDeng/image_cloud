@@ -9,9 +9,7 @@ export default function Home() {
   const dispatch = useAppDispatch()
 
   const getUserInfo = async () => {
-    if (!user) {
-      await dispatch(fetchUserInfo())
-    }
+    !user && (await dispatch(fetchUserInfo()))
     dispatch(fetchUserRepository())
   }
 
