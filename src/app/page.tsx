@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useAppSelector, useAppDispatch } from '@/store/hooks'
 import { fetchUserInfo } from '@/store/user'
 import { fetchUserRepository } from '@/store/repository'
+import Header from './components/header/header'
 export default function Home() {
   const user = useAppSelector((store) => store.user.user)
   const dispatch = useAppDispatch()
@@ -16,5 +17,9 @@ export default function Home() {
   useEffect(() => {
     getUserInfo()
   }, [])
-  return <main>8888</main>
+  return (
+    <main>
+      <Header />
+    </main>
+  )
 }

@@ -1,0 +1,11 @@
+.header {
+  background-color: rgb(var(--background-dark));
+  @apply flex h-16 items-center;
+  .logo {
+    color: rgb(var(--background-))
+    @apply w-64;
+  }
+  .nav {
+    @apply flex-1;
+  }
+}
