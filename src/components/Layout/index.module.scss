@@ -1,0 +1,6 @@
+.layout {
+    @apply fixed flex flex-col w-screen h-screen;
+    .content {
+      @apply flex flex-1;
+    }
+  }

@@ -1,0 +1,5 @@
+.nav {
+  background-color: rgb(var(--background));
+  border-right-color: rgb(var(--border-style));
+  @apply w-64 h-full border-r;
+}
