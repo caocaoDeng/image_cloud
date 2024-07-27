@@ -3,13 +3,13 @@ import Sider from './sider/sider'
 import Content from './content/content'
 import styles from './index.module.scss'
 
-export default function Layout() {
+export default function Layout({ children }: { children: React.ReactNode }) {
     return (
     <main className={styles.layout}>
       <Header />
       <div className={styles.content}>
         <Sider></Sider>
-        <Content></Content>
+        <Content>{ children }</Content>
       </div>
     </main>
     )
