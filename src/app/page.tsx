@@ -4,7 +4,8 @@ import { useEffect } from 'react'
 import { useAppSelector, useAppDispatch } from '@/store/hooks'
 import { fetchUserInfo } from '@/store/user'
 import { fetchUserRepository } from '@/store/repository'
-import Header from './components/header/header'
+import Layout from '@/components/Layout'
+
 export default function Home() {
   const user = useAppSelector((store) => store.user.user)
   const dispatch = useAppDispatch()
@@ -18,8 +19,6 @@ export default function Home() {
     getUserInfo()
   }, [])
   return (
-    <main>
-      <Header />
-    </main>
+    <Layout></Layout>
   )
 }
