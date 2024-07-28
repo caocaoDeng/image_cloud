@@ -47,6 +47,7 @@ export interface ReposContent {
   name: string
   path: string
   sha: string
+  type: string
   html_url: string
   download_url: string
 }

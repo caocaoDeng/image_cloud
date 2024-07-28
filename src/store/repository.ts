@@ -35,22 +35,24 @@ export const fetchUserRepository = () => {
   return async (dispatch: Dispatch, getState: () => State) => {
     const { user } = getState()
     const username = user.user?.login || ''
-    // let reops = `${username}.github.io`
-    let reops = `api-test`
+    let reops = `${username}.github.io`
     const r = await api.getUserRepositories({ username })
     const qReops = r.find((repository) => repository.name === reops)
     // 存在直接设置repos，不存在创建之后再设置repos
     qReops
       ? await dispatch(setRepository(qReops))
       : await dispatch(createRepos())
-    dispatch(fetchReposContent())
+    await dispatch(fetchReposContent())
   }
 }
 
 // 创建 repos
 export const createRepos = () => {
   return async (dispatch: Dispatch, getState: () => State) => {
-    const repos = await api.createRepository({ name: 'api-test' })
+    const { user } = getState()
+    const username = user.user?.login || ''
+    let reops = `${username}.github.io`
+    const repos = await api.createRepository({ name: reops })
     dispatch(setRepository(repos))
   }
 }
@@ -63,7 +65,7 @@ export const fetchReposContent = () => {
     } catch (error) {
       // TODO 调整接口封装
       // 未查询到 初始化
-      dispatch(createReposContent({ path: 'log.json', content: '' }))
+      // dispatch(createReposContent({ path: 'log.json', content: '' }))
     }
   }
 }
@@ -76,7 +78,8 @@ export interface CreateRepoParams {
 export const createReposContent = ({ path, content }: CreateRepoParams) => {
   path = `${BASE_PATH}/${path}`
   return async (dispatch: Dispatch, getState: () => State) => {
-    const r = api.updateReposContent({ path, content })
+    await api.updateReposContent({ path, content })
+    await dispatch(fetchReposContent())
   }
 }
 
