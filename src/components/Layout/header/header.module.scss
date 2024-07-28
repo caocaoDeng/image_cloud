@@ -1,7 +1,7 @@
 .header {
   background-color: rgba(var(--background), 0.98);
   border-bottom-color: rgb(var(--border-style));
-  @apply flex h-16 items-center px-2.5 border-b;
+  @apply flex shrink-0 h-16 items-center px-2.5 border-b;
   .title {
     color: rgb(var(--foreground-active));
     @apply w-64 text-xl font-semibold;

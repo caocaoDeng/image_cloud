@@ -4,7 +4,7 @@
 
 :root {
   /* 前景色 */
-  --foreground: 80, 82, 90;
+  --foreground: 171, 172, 176;
   /* boorder 颜色 */
   --border-style: 0, 0, 0;
   /* 前景色激活 */
@@ -22,7 +22,18 @@
   }
 }
 
+::-webkit-scrollbar {
+  width: 6px; /* 设置滚动条宽度 */
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background-color: rgba(var(--foreground), 0.3); /* 设置滚动条颜色 */
+}
+
 @layer utilities {
+  .el-scrollbar:not(:hover)::-webkit-scrollbar {
+    width: 0;
+  }
   button {
     @apply px-5 py-2.5 text-sm font-semibold leading-5 rounded-md tracking-widest bg-gray-200 hover:bg-gray-400;
   }
