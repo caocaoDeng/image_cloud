@@ -21,10 +21,11 @@ export default function Home() {
     .map(() => ({
         height: Math.floor(Math.random() * 200 + 100)
     }))
-
+  
   useEffect(() => {
-    getUserInfo()
+    // getUserInfo()
   }, [])
+
   return (
     <Layout>
       <WaterFall maxWidth={196} gap={12} data={data}></WaterFall>

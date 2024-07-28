@@ -4,10 +4,12 @@ import api from '@/api'
 import { User } from '@/api/interface'
 
 export interface InitialState {
+  auth_token: string
   user: User | null
 }
 
 const initialState: InitialState = {
+  auth_token: '',
   user: null,
 }
 
@@ -15,6 +17,10 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    setAuthToken: (state, { payload }: PayloadAction<string>) => {
+      state.auth_token = payload
+    },
+
     setUserInfo: (state, { payload }: PayloadAction<User>) => {
       state.user = payload
     },
