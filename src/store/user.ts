@@ -27,7 +27,7 @@ export const userSlice = createSlice({
   },
 })
 
-export const { setUserInfo } = userSlice.actions
+export const { setAuthToken, setUserInfo } = userSlice.actions
 
 // 异步Thunk
 export const fetchUserInfo = () => {
