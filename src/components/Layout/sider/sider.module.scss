@@ -2,11 +2,25 @@
   color: rgb(var(--foreground));
   background-color: rgb(var(--background));
   border-right-color: rgb(var(--border-style));
-  @apply w-64 h-full border-r text-sm;
+  @apply flex flex-col w-64 h-full border-r text-sm;
   .dir-item {
     &:hover {
       color: rgb(var(--foreground-active));
     }
     @apply flex items-center gap-3 p-2 mb-1 cursor-pointer rounded hover:bg-blue-600 transition-all;
+  }
+  .search {
+    @apply w-24 transition-all;
+    &:has(input:focus) {
+      @apply w-full;
+    }
+    &:has(input:focus) + div {
+      @apply hidden;
+    }
+  }
+  .btn {
+    color: rgb(var(--foreground));
+    background-color: rgb(var(--placeholder));
+    @apply w-max px-2.5 py-1.5 text-xs leading-5 font-normal rounded hover:bg-blue-600 hover:text-white;
   }
 }

@@ -37,7 +37,7 @@ export default function Login() {
         <form>
           <label className="form-item">
             <span className="label">Auth Token</span>
-            <input type="text" required={isEmpty} defaultValue={token} onChange={handleChange} />
+            <input type="text" className="mt-1" required={isEmpty} defaultValue={token} onChange={handleChange} />
             {isEmpty ? <p className="error">请填写 auth token</p> : <></>}
           </label>
           <button type="button" className={`${styles.button} w-full text-white`} onClick={submit}>连接</button>
