@@ -52,7 +52,7 @@
     required:outline-red-600 required:border-red-600;
   }
   button {
-    @apply px-5 py-2.5 text-sm font-semibold leading-5 rounded-md tracking-widest bg-gray-200 hover:bg-gray-400;
+    @apply px-4 py-1.5 text-sm text-white leading-5 rounded-md tracking-widest bg-blue-500 hover:bg-blue-600;
   }
 }
 
