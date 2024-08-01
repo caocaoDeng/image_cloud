@@ -12,7 +12,6 @@ export default function Sider() {
 
   const imgPopElm = useRef<UploadImgPopEmitEvent>(null)
 
-  const [visible, setVisible] = useState<boolean>(false)
   const [dir, setDir] = useState<ReposContent[]>(
     new Array(33).fill(0).map((_, index) => ({
       name: '新建文件夹' + index,
@@ -28,6 +27,7 @@ export default function Sider() {
   }
 
   useEffect(() => {
+    console.log(store.getState())
     getUserRepos()
   }, [])
 
