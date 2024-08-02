@@ -19,7 +19,7 @@ export const initOctokit = (auth?: string): Octokit => {
   const userInfo = localStorage.getItem(USERINFO)
   const { auth_token } = JSON.parse(userInfo || '{}') as InitialState
   const octokit = new Octokit({
-    auth: auth || auth_token,
+    auth: auth || atob(auth_token),
     userAgent: 'image_cloud/v1.2.3',
   })
   window.octokit = octokit

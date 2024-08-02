@@ -1,5 +1,6 @@
-import { createSlice, GetState, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { State, Dispatch } from './index'
+import { USERINFO } from '@/utils/const'
 import api from '@/api'
 import { User } from '@/api/interface'
 
@@ -31,8 +32,15 @@ export const { setAuthToken, setUserInfo } = userSlice.actions
 
 // 异步Thunk
 export const fetchUserInfo = () => {
-  return async (dispatch: Dispatch, getState: GetState<State>) => {
+  return async (dispatch: Dispatch, getState: () => State) => {
+    const { user } = getState()
     const r = await api.getUserInfo()
+    const userInfo: InitialState = {
+      ...user,
+      user: r,
+    }
+    const us = JSON.stringify(userInfo)
+    localStorage.setItem(USERINFO, us)
     dispatch(setUserInfo(r))
   }
 }
