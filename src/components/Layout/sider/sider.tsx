@@ -4,6 +4,7 @@ import { useAppDispatch } from '@/store/hooks'
 import { fetchUserRepository } from '@/store/repository'
 import { ReposContent } from '@/api/interface'
 import { BASE_PATH } from '@/utils/const'
+import CreateDir, { CreateDirPopEmitEvent } from './create-dir'
 import UploadImgPop, { UploadImgPopEmitEvent } from './upload-img-pop'
 import styles from './sider.module.scss'
 
@@ -11,13 +12,9 @@ export default function Sider() {
   const dispatch = useAppDispatch()
 
   const imgPopElm = useRef<UploadImgPopEmitEvent>(null)
+  const dirPopElm = useRef<CreateDirPopEmitEvent>(null)
 
-  const [dir, setDir] = useState<ReposContent[]>(
-    new Array(33).fill(0).map((_, index) => ({
-      name: '新建文件夹' + index,
-      sha: index,
-    }))
-  )
+  const [dir, setDir] = useState<ReposContent[]>([])
 
   const getUserRepos = async () => {
     await dispatch(fetchUserRepository())
@@ -27,7 +24,6 @@ export default function Sider() {
   }
 
   useEffect(() => {
-    console.log(store.getState())
     getUserRepos()
   }, [])
 
@@ -66,7 +62,12 @@ export default function Sider() {
           />
         </div>
         <div className="flex gap-2">
-          <button className={styles.btn}>新建目录</button>
+          <button
+            className={styles.btn}
+            onClick={() => dirPopElm.current?.setVisible(true)}
+          >
+            新建目录
+          </button>
           <button
             className={styles.btn}
             onClick={() => imgPopElm.current?.setVisible(true)}
@@ -75,6 +76,7 @@ export default function Sider() {
           </button>
         </div>
       </div>
+      <CreateDir ref={dirPopElm} />
       <UploadImgPop ref={imgPopElm} />
     </nav>
   )

@@ -53,7 +53,7 @@ export default forwardRef(function UploadImgPop(
   }
 
   return (
-    <Popover visible={visible} onClose={setVisible}>
+    <Popover title="上传图片" visible={visible} onClose={setVisible}>
       <div className="flex">
         <Upload ref={uploadElm} className="flex-1" onChange={handleChange}>
           <div

@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import userReducer from './user'
+import userReducer, { initialState } from './user'
 import repositoryReducer from './repository'
 import { USERINFO } from '@/utils/const'
 
@@ -12,7 +12,7 @@ export const store = configureStore({
 
 store.subscribe(() => {
   const { user } = store.getState()
-  const userInfo = JSON.stringify(user)
+  const userInfo = JSON.stringify(user || initialState)
   localStorage.setItem(USERINFO, userInfo)
 })
 

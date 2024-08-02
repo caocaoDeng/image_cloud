@@ -8,7 +8,7 @@ export interface InitialState {
   user: User | null
 }
 
-const initialState: InitialState = {
+export const initialState: InitialState = {
   auth_token: '',
   user: null,
 }

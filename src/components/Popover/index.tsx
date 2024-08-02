@@ -1,6 +1,7 @@
 import { useEffect, useRef, Dispatch, SetStateAction, useState } from 'react'
 
 export default function Popover({
+  title,
   visible,
   onClose,
   onSubmit,
@@ -8,6 +9,7 @@ export default function Popover({
   ...rest
 }: {
   visible?: boolean
+  title?: string
   onClose?: Dispatch<SetStateAction<boolean>>
   onSubmit?: () => void
   children?: React.ReactNode
@@ -46,7 +48,7 @@ export default function Popover({
         style={{ width: '520px' }}
       >
         <header className="flex items-center justify-between px-4 py-3.5 border-b border-zinc-300">
-          <h3 className="flex-1 font-medium truncate">6666</h3>
+          <h3 className="flex-1 font-medium truncate">{title}</h3>
           <span
             className="iconfont icon-close leading-none cursor-pointer text-zinc-400 hover:text-zinc-500"
             style={{ fontSize: '18px' }}
