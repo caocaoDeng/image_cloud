@@ -17,16 +17,10 @@ export default function Sider() {
 
   const [dir, setDir] = useState<ReposContent[]>([])
 
-  const getReposContent = async () => await dispatch(fetchReposContent())
-
   useEffect(() => {
-    // const dirData = repos.content.filter(({ type }) => type === 'dir')
-    // setDir(dirData)
+    const dirData = content.filter(({ type }) => type === 'dir')
+    setDir(dirData)
   }, [content])
-
-  useEffect(() => {
-    repos && getReposContent()
-  }, [repos])
 
   return (
     <nav className={styles.nav}>
