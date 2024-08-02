@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { State, Dispatch } from './index'
 import api from '@/api'
-import { ReposContent, Repository } from '@/api/interface'
+import { ReposContent, Repository, User } from '@/api/interface'
 import { BASE_PATH } from '@/utils/const'
 
 interface InitialState {
@@ -57,13 +57,12 @@ export const createRepos = () => {
 export const fetchReposContent = () => {
   return async (dispatch: Dispatch, getState: () => State) => {
     try {
-      const {
-        user: { user },
-        repository: { repos },
-      } = getState()
+      const { user, repository } = getState()
+      const { login } = user.user as User
+      const { name } = repository.repos as Repository
       const content = await api.getReposContent({
-        owner: user?.login as string,
-        repo: repos?.name as string,
+        owner: login,
+        repo: name,
         path: BASE_PATH,
       })
       dispatch(setContent(content))
@@ -81,11 +80,33 @@ export interface CreateRepoParams {
   content: string
 }
 
-export const createReposContent = ({ path, content }: CreateRepoParams) => {
-  path = `${BASE_PATH}/${path}`
+export type CreateType = 'dir' | 'file'
+
+export const createReposContent = (
+  { path, content }: CreateRepoParams,
+  type: CreateType
+) => {
+  const fullPath = `${BASE_PATH}/${path}`
   return async (dispatch: Dispatch, getState: () => State) => {
-    await api.updateReposContent({ path, content })
-    await dispatch(fetchReposContent())
+    const { user, repository } = getState()
+    const { login, name, email } = user.user as User
+    const { name: repoName } = repository.repos as Repository
+    const res = await api.updateReposContent({
+      owner: login,
+      repo: repoName,
+      path: fullPath,
+      content,
+      committer: { name, email },
+    })
+    const repoC =
+      type === 'dir'
+        ? {
+            ...res.content,
+            name: path.replace(/\/.*/, ''),
+            type: 'dir',
+          }
+        : res.content
+    dispatch(setContent([repoC]))
   }
 }
 

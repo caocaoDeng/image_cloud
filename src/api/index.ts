@@ -1,12 +1,11 @@
 import request from '@/utils/request'
-import store from '@/store'
 import {
   User,
   IRepositoriesParams,
   Repository,
   CreateReposParams,
-  RepoContent,
   ReposContent,
+  UpdateReposParams,
 } from './interface'
 
 const api = {
@@ -30,7 +29,7 @@ const api = {
   },
 
   // 获取repo内容
-  getReposContent({ owner, repo, path }: RepoContent) {
+  getReposContent({ owner, repo, path }: UpdateReposParams) {
     return request<ReposContent[]>(
       'GET',
       `/repos/${owner}/${repo}/contents/${path}`
@@ -38,25 +37,14 @@ const api = {
   },
 
   // 更新内容
-  updateReposContent(params: RepoContent) {
-    const { user, repository } = store.getState()
-    const { login, name, email } = user.user as User
-    const { name: repoName } = repository.repository as Repository
-    params = {
-      owner: login,
-      repo: repoName,
-      message: 'update resourse',
-      committer: {
-        name: name,
-        email: email,
-      },
+  updateReposContent(params: UpdateReposParams) {
+    const { owner, repo, path } = params
+    return request<{
+      content: ReposContent
+    }>('PUT', `/repos/${owner}/${repo}/contents/${path}`, {
       ...params,
-    }
-    return request<RepoContent>(
-      'PUT',
-      `/repos/${login}/${repoName}/contents/${params.path}`,
-      params
-    )
+      message: 'update resourse',
+    })
   },
 }
 

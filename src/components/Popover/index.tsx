@@ -19,8 +19,7 @@ export default function Popover({
   const [status, setStatus] = useState<boolean>(false)
 
   const submit = async () => {
-    onSubmit && (await onSubmit())
-    setStatus(false)
+    onSubmit ? await onSubmit() : setStatus(false)
   }
 
   useEffect(() => {

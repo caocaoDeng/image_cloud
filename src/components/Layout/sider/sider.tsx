@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useAppSelector, useAppDispatch } from '@/store/hooks'
-import { fetchReposContent } from '@/store/repository'
+import { useAppSelector } from '@/store/hooks'
 import { ReposContent } from '@/api/interface'
 import { BASE_PATH } from '@/utils/const'
 import CreateDir, { CreateDirPopEmitEvent } from './create-dir'
@@ -8,9 +7,7 @@ import UploadImgPop, { UploadImgPopEmitEvent } from './upload-img-pop'
 import styles from './sider.module.scss'
 
 export default function Sider() {
-  const dispatch = useAppDispatch()
-
-  const { repos, content } = useAppSelector((store) => store.repository)
+  const { content } = useAppSelector((store) => store.repository)
 
   const imgPopElm = useRef<UploadImgPopEmitEvent>(null)
   const dirPopElm = useRef<CreateDirPopEmitEvent>(null)
@@ -37,8 +34,8 @@ export default function Sider() {
         />
       </div>
       <ul className="flex-1 px-2.5 overflow-auto el-scrollbar">
-        {dir.map(({ name, sha }) => (
-          <li key={sha} className={styles['dir-item']}>
+        {dir.map(({ name, sha }, index) => (
+          <li key={sha + index} className={styles['dir-item']}>
             <span className="iconfont icon-24gf-folder"></span>
             <span className="flex-1 truncate">{name}</span>
           </li>

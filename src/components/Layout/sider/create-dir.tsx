@@ -31,11 +31,16 @@ export default forwardRef(function UploadImgPop(
 
   const handleSubmit = async () => {
     await dispath(
-      createReposContent({
-        path: 'gemini_app/log.txt',
-        content: '',
-      })
+      createReposContent(
+        {
+          path: `${dirName}/log.txt`,
+          content: '',
+        },
+        'dir'
+      )
     )
+    setDirName('')
+    setVisible(false)
   }
 
   useImperativeHandle(
@@ -59,6 +64,7 @@ export default forwardRef(function UploadImgPop(
           <input
             type="text"
             className="mt-1"
+            placeholder="避免输入空格"
             required={valid}
             defaultValue={dirName}
             onChange={handleChange}

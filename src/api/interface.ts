@@ -1,3 +1,4 @@
+// 用户信息
 export interface User {
   id: number
   location: string
@@ -9,18 +10,31 @@ export interface User {
   html_url: string
 }
 
+// 获取 repos 的参数
 export interface IRepositoriesParams {
   username: string
 }
 
+// repos 信息
 export interface Repository {
   name: string
 }
 
+// 创建 repos 的参数
 export interface CreateReposParams {
   name: string
   description?: string
   private?: boolean
+}
+
+// 获取 repos 返回的信息
+export interface ReposContent {
+  name: string
+  path: string
+  sha: string
+  type: string
+  html_url: string
+  download_url: string
 }
 
 export interface Committer {
@@ -28,7 +42,11 @@ export interface Committer {
   email: string
 }
 
-export interface RepoContent {
+/**
+ * 更新/获取 repos content 的参数
+ * 更新时 content committer 必传
+ */
+export interface UpdateReposParams {
   // username
   owner: string
   // 仓库名称
@@ -41,13 +59,4 @@ export interface RepoContent {
   content?: string
   // 提交人
   committer?: Committer
-}
-
-export interface ReposContent {
-  name: string
-  path: string
-  sha: string
-  type: string
-  html_url: string
-  download_url: string
 }
