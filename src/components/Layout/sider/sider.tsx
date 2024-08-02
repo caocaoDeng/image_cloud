@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import store from '@/store'
-import { useAppDispatch } from '@/store/hooks'
-import { fetchUserRepository } from '@/store/repository'
+import { useAppSelector, useAppDispatch } from '@/store/hooks'
+import { fetchReposContent } from '@/store/repository'
 import { ReposContent } from '@/api/interface'
 import { BASE_PATH } from '@/utils/const'
 import CreateDir, { CreateDirPopEmitEvent } from './create-dir'
@@ -11,21 +10,23 @@ import styles from './sider.module.scss'
 export default function Sider() {
   const dispatch = useAppDispatch()
 
+  const repos = useAppSelector((store) => store.repository)
+
   const imgPopElm = useRef<UploadImgPopEmitEvent>(null)
   const dirPopElm = useRef<CreateDirPopEmitEvent>(null)
 
   const [dir, setDir] = useState<ReposContent[]>([])
 
-  const getUserRepos = async () => {
-    await dispatch(fetchUserRepository())
-    const { repository: repo } = store.getState()
-    const dirData = repo.content.filter(({ type }) => type === 'dir')
-    setDir(dirData)
-  }
+  const getReposContent = async () => await dispatch(fetchReposContent())
 
   useEffect(() => {
-    getUserRepos()
-  }, [])
+    // const dirData = repos.content.filter(({ type }) => type === 'dir')
+    // setDir(dirData)
+  }, [repos.content])
+
+  useEffect(() => {
+    repos.repository && getReposContent()
+  }, [repos.repository])
 
   return (
     <nav className={styles.nav}>

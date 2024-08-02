@@ -30,13 +30,10 @@ const api = {
   },
 
   // 获取repo内容
-  getReposContent({ path }: { path: string }) {
-    const { user, repository } = store.getState()
-    const { login } = user.user as User
-    const { name: repoName } = repository.repository as Repository
+  getReposContent({ owner, repo, path }: RepoContent) {
     return request<ReposContent[]>(
       'GET',
-      `/repos/${login}/${repoName}/contents/${path}`
+      `/repos/${owner}/${repo}/contents/${path}`
     )
   },
 

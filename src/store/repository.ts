@@ -42,7 +42,6 @@ export const fetchUserRepository = () => {
     qReops
       ? await dispatch(setRepository(qReops))
       : await dispatch(createRepos())
-    await dispatch(fetchReposContent())
   }
 }
 
@@ -60,9 +59,18 @@ export const createRepos = () => {
 export const fetchReposContent = () => {
   return async (dispatch: Dispatch, getState: () => State) => {
     try {
-      const content = await api.getReposContent({ path: BASE_PATH })
+      const {
+        user: { user },
+        repository: { repository },
+      } = getState()
+      const content = await api.getReposContent({
+        owner: user?.login as string,
+        repo: repository?.name as string,
+        path: BASE_PATH,
+      })
       dispatch(setContent(content))
     } catch (error) {
+      console.log(error, 99)
       // TODO 调整接口封装
       // 未查询到 初始化
       // dispatch(createReposContent({ path: 'log.json', content: '' }))

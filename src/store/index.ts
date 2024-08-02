@@ -10,11 +10,11 @@ export const store = configureStore({
   },
 })
 
-store.subscribe(() => {
-  const { user } = store.getState()
-  const userInfo = JSON.stringify(user || initialState)
-  localStorage.setItem(USERINFO, userInfo)
-})
+// store.subscribe(() => {
+//   const { user } = store.getState()
+//   const userInfo = JSON.stringify(user || initialState)
+//   localStorage.setItem(USERINFO, userInfo)
+// })
 
 // https://redux.js.org/tutorials/typescript-quick-start
 export type State = ReturnType<typeof store.getState>

@@ -3,9 +3,10 @@ import {
   forwardRef,
   SetStateAction,
   useImperativeHandle,
-  useRef,
   useState,
 } from 'react'
+import { createReposContent } from '@/store/repository'
+import { useAppDispatch } from '@/store/hooks'
 import Popover from '@/components/Popover'
 
 export interface CreateDirPopEmitEvent {
@@ -16,6 +17,8 @@ export default forwardRef(function UploadImgPop(
   props,
   ref: React.ForwardedRef<CreateDirPopEmitEvent>
 ) {
+  const dispath = useAppDispatch()
+
   const [visible, setVisible] = useState<boolean>(false)
   const [valid, setValid] = useState<boolean>(false)
   const [dirName, setDirName] = useState<string>('')
@@ -24,6 +27,15 @@ export default forwardRef(function UploadImgPop(
     const value = e.target.value
     setValid(!value)
     setDirName(value)
+  }
+
+  const handleSubmit = async () => {
+    await dispath(
+      createReposContent({
+        path: 'gemini_app/log.txt',
+        content: '',
+      })
+    )
   }
 
   useImperativeHandle(
@@ -35,7 +47,12 @@ export default forwardRef(function UploadImgPop(
   )
 
   return (
-    <Popover title="创建目录" visible={visible} onClose={setVisible}>
+    <Popover
+      title="创建目录"
+      visible={visible}
+      onClose={setVisible}
+      onSubmit={handleSubmit}
+    >
       <form>
         <label className="form-item">
           <span className="label">目录名称</span>

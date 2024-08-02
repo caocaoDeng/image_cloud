@@ -30,15 +30,15 @@ export interface Committer {
 
 export interface RepoContent {
   // username
-  owner?: string
+  owner: string
   // 仓库名称
-  repo?: string
+  repo: string
   // 更新路径
   path: string
   // 提交信息
   message?: string
   // 提交内容 base64
-  content: string
+  content?: string
   // 提交人
   committer?: Committer
 }
