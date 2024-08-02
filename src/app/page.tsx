@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { useAppDispatch } from '@/store/hooks'
 import { InitialState, setAuthToken, setUserInfo } from '@/store/user'
-import { fetchUserRepository } from '@/store/repository'
+import { fetchUserRepos } from '@/store/repository'
 import { USERINFO } from '@/utils/const'
 import Layout from '@/components/Layout'
 import WaterFall, { Location } from '@/components/WaterFall'
@@ -17,7 +17,7 @@ export default function Home() {
   user && dispatch(setUserInfo(user))
 
   // 获取仓库数据
-  const getUserRepos = async () => await dispatch(fetchUserRepository())
+  const getUserRepos = async () => await dispatch(fetchUserRepos())
   getUserRepos()
 
   const data: Location[] = new Array(30).fill(0).map(() => ({

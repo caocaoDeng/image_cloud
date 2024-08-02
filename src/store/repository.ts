@@ -5,12 +5,12 @@ import { ReposContent, Repository } from '@/api/interface'
 import { BASE_PATH } from '@/utils/const'
 
 interface InitialState {
-  repository: Repository | null | undefined
+  repos: Repository | null | undefined
   content: ReposContent[]
 }
 
 const initialState: InitialState = {
-  repository: undefined,
+  repos: undefined,
   content: [],
 }
 
@@ -18,8 +18,8 @@ export const repositorySlice = createSlice({
   name: 'repository',
   initialState,
   reducers: {
-    setRepository(state, { payload }: PayloadAction<Repository>) {
-      state.repository = payload
+    setRepos(state, { payload }: PayloadAction<Repository>) {
+      state.repos = payload
     },
 
     setContent(state, { payload }: PayloadAction<ReposContent[]>) {
@@ -28,20 +28,18 @@ export const repositorySlice = createSlice({
   },
 })
 
-export const { setRepository, setContent } = repositorySlice.actions
+export const { setRepos, setContent } = repositorySlice.actions
 
 // 查询repos
-export const fetchUserRepository = () => {
+export const fetchUserRepos = () => {
   return async (dispatch: Dispatch, getState: () => State) => {
     const { user } = getState()
     const username = user.user?.login || ''
     let reops = `${username}.github.io`
     const r = await api.getUserRepositories({ username })
-    const qReops = r.find((repository) => repository.name === reops)
+    const qReops = r.find((repos) => repos.name === reops)
     // 存在直接设置repos，不存在创建之后再设置repos
-    qReops
-      ? await dispatch(setRepository(qReops))
-      : await dispatch(createRepos())
+    qReops ? await dispatch(setRepos(qReops)) : await dispatch(createRepos())
   }
 }
 
@@ -52,7 +50,7 @@ export const createRepos = () => {
     const username = user.user?.login || ''
     let reops = `${username}.github.io`
     const repos = await api.createRepository({ name: reops })
-    dispatch(setRepository(repos))
+    dispatch(setRepos(repos))
   }
 }
 
@@ -61,11 +59,11 @@ export const fetchReposContent = () => {
     try {
       const {
         user: { user },
-        repository: { repository },
+        repository: { repos },
       } = getState()
       const content = await api.getReposContent({
         owner: user?.login as string,
-        repo: repository?.name as string,
+        repo: repos?.name as string,
         path: BASE_PATH,
       })
       dispatch(setContent(content))

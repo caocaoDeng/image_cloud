@@ -10,7 +10,7 @@ import styles from './sider.module.scss'
 export default function Sider() {
   const dispatch = useAppDispatch()
 
-  const repos = useAppSelector((store) => store.repository)
+  const { repos, content } = useAppSelector((store) => store.repository)
 
   const imgPopElm = useRef<UploadImgPopEmitEvent>(null)
   const dirPopElm = useRef<CreateDirPopEmitEvent>(null)
@@ -22,11 +22,11 @@ export default function Sider() {
   useEffect(() => {
     // const dirData = repos.content.filter(({ type }) => type === 'dir')
     // setDir(dirData)
-  }, [repos.content])
+  }, [content])
 
   useEffect(() => {
-    repos.repository && getReposContent()
-  }, [repos.repository])
+    repos && getReposContent()
+  }, [repos])
 
   return (
     <nav className={styles.nav}>
