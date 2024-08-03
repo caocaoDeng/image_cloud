@@ -37,9 +37,7 @@ export const fetchUserRepos = () => {
     const username = user.user?.login || ''
     let reops = `${username}.github.io`
     const r = await api.getUserRepositories({ username })
-    const qReops = r.find((repos) => repos.name === reops)
-    // 存在直接设置repos，不存在创建之后再设置repos
-    qReops ? await dispatch(setRepos(qReops)) : await dispatch(createRepos())
+    return r.find((repos) => repos.name === reops)
   }
 }
 
@@ -49,29 +47,22 @@ export const createRepos = () => {
     const { user } = getState()
     const username = user.user?.login || ''
     let reops = `${username}.github.io`
-    const repos = await api.createRepository({ name: reops })
-    dispatch(setRepos(repos))
+    return await api.createRepository({ name: reops })
   }
 }
 
-export const fetchReposContent = () => {
+export const fetchReposContent = (path?: string) => {
   return async (dispatch: Dispatch, getState: () => State) => {
-    try {
-      const { user, repository } = getState()
-      const { login } = user.user as User
-      const { name } = repository.repos as Repository
-      const content = (await api.getReposContent({
-        owner: login,
-        repo: name,
-        path: BASE_PATH,
-      })) as ReposContent[]
-      dispatch(setContent(content))
-    } catch (error) {
-      console.log(error, 99)
-      // TODO 调整接口封装
-      // 未查询到 初始化
-      // dispatch(createReposContent({ path: 'log.json', content: '' }))
-    }
+    const { user, repository } = getState()
+    const { login } = user.user as User
+    const { name } = repository.repos as Repository
+    const fullPath = path ? `${BASE_PATH}/${path}` : BASE_PATH
+    const reposContent = await api.getReposContent({
+      owner: login,
+      repo: name,
+      path: fullPath,
+    })
+    return reposContent
   }
 }
 
@@ -98,15 +89,7 @@ export const createReposContent = (
       content,
       committer: { name, email },
     })
-    const repoC =
-      type === 'dir'
-        ? {
-            ...res.content,
-            name: path.replace(/\/.*/, ''),
-            type: 'dir',
-          }
-        : res.content
-    dispatch(setContent([repoC]))
+    return res.content
   }
 }
 

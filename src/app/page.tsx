@@ -41,13 +41,17 @@ export default function Home() {
   }
 
   // 获取仓库数据
-  const getUserRepos = async () => await dispatch(fetchUserRepos())
-  // 获取仓库内容
-  const getReposContent = async () => await dispatch(fetchReposContent())
+  const getUserRepos = async () => {
+    let repos = await dispatch(fetchUserRepos())
+    if (repos) return await dispatch(setRepos(repos))
+    repos = await dispatch(createRepos())
+    await dispatch(setRepos(repos))
+  }
 
-  const getData = async () => {
-    await getUserRepos()
-    await getReposContent()
+  // 获取仓库内容
+  const getReposContent = async () => {
+    const reposContent = (await dispatch(fetchReposContent())) as ReposContent[]
+    await dispatch(setContent(reposContent))
   }
 
   /**
