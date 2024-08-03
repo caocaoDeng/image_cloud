@@ -5,7 +5,7 @@ import {
   useImperativeHandle,
   useState,
 } from 'react'
-import { createReposContent } from '@/store/repository'
+import { createReposContent, setContent } from '@/store/repository'
 import { useAppDispatch } from '@/store/hooks'
 import Popover from '@/components/Popover'
 
@@ -31,14 +31,17 @@ export default forwardRef(function UploadImgPop(
 
   const handleSubmit = async () => {
     if (!dirName) return setValid(true)
+    const content = await dispath(
+      createReposContent({ path: `${dirName}/log.txt`, content: '' })
+    )
     await dispath(
-      createReposContent(
+      setContent([
         {
-          path: `${dirName}/log.txt`,
-          content: '',
+          ...content,
+          name: dirName,
+          type: 'dir',
         },
-        'dir'
-      )
+      ])
     )
     setDirName('')
     setVisible(false)
