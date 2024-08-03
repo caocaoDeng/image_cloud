@@ -8,8 +8,15 @@ import {
   useState,
 } from 'react'
 import { useAppDispatch } from '@/store/hooks'
-import { createReposContent } from '@/store/repository'
-import { getImageInfo, ImageInfo, readFile2ArrayBuffer } from '@/utils'
+import { createReposContent, setContent } from '@/store/repository'
+import {
+  getImageInfo,
+  ImgOnloadInfo,
+  LogsData,
+  readFile2ArrayBuffer,
+} from '@/utils'
+import { ImageInfo } from '@/utils'
+import { LOGFILENAME, LOGKEY } from '@/utils/const'
 import Popover from '@/components/Popover'
 import Upload, { IUploadEmitEvent } from '@/components/Upload'
 
@@ -51,7 +58,7 @@ export default forwardRef(function UploadImgPop(
       const base64 = Buffer.from(arrayBuffer).toString('base64')
       const { width, height } = (await getImageInfo(
         `data:${f.type};base64,${base64}`
-      )) as ImageInfo
+      )) as ImgOnloadInfo
       data.push({
         name: f.name,
         type: f.type,
@@ -63,20 +70,37 @@ export default forwardRef(function UploadImgPop(
     setLocalImgData((preData) => [...data, ...preData])
   }
 
+  // 更新日志文件
+  const updateLogs = (logs: ImageInfo[]) => {
+    const logsStr = localStorage.getItem(LOGKEY)
+    const { sha, content = [] }: LogsData = JSON.parse(logsStr || '{}')
+    const updatedContent = [...logs, ...content]
+    const contentStr = JSON.stringify(updatedContent)
+    const base64 = btoa(contentStr)
+    localStorage.setItem(
+      LOGKEY,
+      JSON.stringify({
+        sha,
+        content: contentStr,
+      })
+    )
+    dispath(createReposContent({ path: LOGFILENAME, content: base64 }))
+  }
+
   const handleSubmit = () => {
     if (!localImgData) return
-    localImgData.forEach(async ({ name, base64 }) => {
-      const r = await dispath(
-        createReposContent(
-          {
-            path: name,
-            content: base64,
-          },
-          'file'
-        )
+    const logs: ImageInfo[] = []
+    localImgData.forEach(async ({ name, base64, width, height }) => {
+      const content = await dispath(
+        createReposContent({ path: name, content: base64 })
       )
-      console.log(r, 'r')
+      logs.push({ width, height, sha: content.sha })
+      dispath(setContent([content]))
+      setLocalImgData([])
+      setVisible(false)
     })
+    // 更新日志文件
+    updateLogs(logs)
   }
 
   return (

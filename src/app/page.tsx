@@ -3,29 +3,23 @@
 import { useEffect, useState } from 'react'
 import { useAppSelector, useAppDispatch } from '@/store/hooks'
 import { InitialState, setAuthToken, setUserInfo } from '@/store/user'
-import { fetchReposContent, fetchUserRepos } from '@/store/repository'
-import { LOGFILENAME, USERINFO, BASE_PATH } from '@/utils/const'
-import { ReposContent, Repository, User } from '@/api/interface'
+import {
+  createRepos,
+  fetchReposContent,
+  fetchUserRepos,
+  setContent,
+  setRepos,
+} from '@/store/repository'
+import { ImageInfo, LogsData, getGivenImageInfo } from '@/utils'
+import { LOGFILENAME, USERINFO, LOGKEY } from '@/utils/const'
+import { ReposContent } from '@/api/interface'
 import Layout from '@/components/Layout'
 import WaterFall from '@/components/WaterFall'
-import api from '@/api'
-
-export interface ImageInfo {
-  width: number
-  height: number
-  // 图片上传成功返回的唯一字段
-  sha: string
-  style?: {
-    width: string
-    height: string
-    transform: string
-  }
-}
 
 export type ExtendReposContent = ReposContent & ImageInfo
 
 export default function Home() {
-  const { user, repository } = useAppSelector((store) => store)
+  const { repository } = useAppSelector((store) => store)
   const { content } = repository
   const dispatch = useAppDispatch()
 
@@ -54,36 +48,29 @@ export default function Home() {
     await dispatch(setContent(reposContent))
   }
 
-  /**
-   * 读取日志文件
-   */
-  let logData: ImageInfo[] | null = null
-  const readLogFile = async () => {
+  // 读取日志文件，存储到本地
+  const readLogsFile = async () => {
     const logFile = content.find(({ name }) => name === LOGFILENAME)
     if (!logFile) return null
-    const { login } = user.user as User
-    const { name } = repository.repos as Repository
-    const res = (await api.getReposContent({
-      owner: login,
-      repo: name,
-      path: `${BASE_PATH}/${LOGFILENAME}`,
-    })) as ReposContent
+    const logs = (await dispatch(
+      fetchReposContent(LOGFILENAME)
+    )) as ReposContent
     // 解析base64
-    const jsonStr = atob(res.content)
-    logData = JSON.parse(jsonStr)
+    const logsJson: LogsData = {
+      sha: logs.sha,
+      content: JSON.parse(atob(logs.content)),
+    }
+    localStorage.setItem(LOGKEY, JSON.stringify(logsJson))
   }
 
-  /**
-   * 获取指定图片的信息
-   * @param sha repos content 的唯一值
-   */
-  const getGivenImageInfo = (sha: string) => {
-    if (!logData) return {}
-    return logData.find(({ sha: imgSha }) => imgSha === sha) || {}
+  const getData = async () => {
+    await getUserRepos()
+    await getReposContent()
   }
 
   const updateData = async () => {
-    await readLogFile()
+    // 减少请求
+    !localStorage.getItem(LOGKEY) && (await readLogsFile())
     const imgList = content
       .filter(({ name, type }) => type === 'file' && name !== LOGFILENAME)
       .map((item) => {

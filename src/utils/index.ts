@@ -1,3 +1,5 @@
+import { LOGKEY } from './const'
+
 // 读取文件，转base64
 export const readFile2Base64 = (file: File): Promise<string> => {
   return new Promise((res, rej) => {
@@ -24,16 +26,17 @@ export const readFile2ArrayBuffer = (file: File): Promise<ArrayBuffer> => {
   })
 }
 
-export interface ImageInfo {
+export interface ImgOnloadInfo {
   width: number
   height: number
   message?: string
 }
 
-export const getImageInfo = (data: File | string): Promise<ImageInfo> => {
+// 加载图片信息
+export const getImageInfo = (data: File | string): Promise<ImgOnloadInfo> => {
   const src =
     typeof data === 'string' ? data : URL.createObjectURL(new Blob([data]))
-  return new Promise<ImageInfo>((res, rej) => {
+  return new Promise<ImgOnloadInfo>((res, rej) => {
     const image = new Image()
     image.src = src
     image.onload = () => res({ width: image.width, height: image.height })
@@ -42,4 +45,32 @@ export const getImageInfo = (data: File | string): Promise<ImageInfo> => {
   }).finally(() => {
     URL.revokeObjectURL(src)
   })
+}
+
+export interface ImageInfo {
+  width: number
+  height: number
+  // 图片上传成功返回的唯一字段
+  sha: string
+  style?: {
+    width: string
+    height: string
+    transform: string
+  }
+}
+
+export interface LogsData {
+  sha: string
+  content: ImageInfo[]
+}
+
+/**
+ * 获取指定图片的信息
+ * @param sha repos content 的唯一值
+ */
+export const getGivenImageInfo = (sha: string) => {
+  const logsStr = localStorage.getItem(LOGKEY)
+  if (!logsStr) return {}
+  const { content }: LogsData = JSON.parse(logsStr)
+  return content.find(({ sha: imgSha }) => imgSha === sha) || {}
 }

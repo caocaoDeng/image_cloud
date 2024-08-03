@@ -67,22 +67,23 @@ export const fetchReposContent = (path?: string) => {
 }
 
 export interface CreateRepoParams {
+  sha?: string
   path: string
   content: string
 }
 
-export type CreateType = 'dir' | 'file'
-
-export const createReposContent = (
-  { path, content }: CreateRepoParams,
-  type: CreateType
-) => {
+export const createReposContent = ({
+  sha,
+  path,
+  content,
+}: CreateRepoParams) => {
   const fullPath = `${BASE_PATH}/${path}`
   return async (dispatch: Dispatch, getState: () => State) => {
     const { user, repository } = getState()
     const { login, name, email } = user.user as User
     const { name: repoName } = repository.repos as Repository
     const res = await api.updateReposContent({
+      sha,
       owner: login,
       repo: repoName,
       path: fullPath,

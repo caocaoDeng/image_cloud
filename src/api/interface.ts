@@ -48,6 +48,7 @@ export interface Committer {
  * 更新时 content committer 必传
  */
 export interface UpdateReposParams {
+  sha?: string
   // username
   owner: string
   // 仓库名称
