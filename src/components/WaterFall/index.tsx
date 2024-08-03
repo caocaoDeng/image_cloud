@@ -66,10 +66,10 @@ export default function WaterFall({
 
   return (
     <div className="relative w-full" ref={wfContainerElm}>
-      {value.map(({ width, height, download_url, sha, style }) => {
+      {value.map(({ width, height, download_url, sha, style }, index) => {
         return (
           <div
-            key={sha}
+            key={sha + index}
             className="absolute border rounded transition-all"
             style={{ borderColor: 'rgb(var(--border-style))', ...style }}
           >

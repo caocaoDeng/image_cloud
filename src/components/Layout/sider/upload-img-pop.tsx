@@ -7,7 +7,9 @@ import {
   useRef,
   useState,
 } from 'react'
-import { readFile2ArrayBuffer } from '@/utils'
+import { useAppDispatch } from '@/store/hooks'
+import { createReposContent } from '@/store/repository'
+import { getImageInfo, ImageInfo, readFile2ArrayBuffer } from '@/utils'
 import Popover from '@/components/Popover'
 import Upload, { IUploadEmitEvent } from '@/components/Upload'
 
@@ -18,12 +20,16 @@ export interface LocalImgData {
   name: string
   type: string
   base64: string
+  width: number
+  height: number
 }
 
 export default forwardRef(function UploadImgPop(
   props,
   ref: React.ForwardedRef<UploadImgPopEmitEvent>
 ) {
+  const dispath = useAppDispatch()
+
   const uploadElm = useRef<IUploadEmitEvent>(null)
 
   const [visible, setVisible] = useState<boolean>(false)
@@ -43,17 +49,43 @@ export default forwardRef(function UploadImgPop(
     for (const f of fileList) {
       const arrayBuffer = await readFile2ArrayBuffer(f)
       const base64 = Buffer.from(arrayBuffer).toString('base64')
+      const { width, height } = (await getImageInfo(
+        `data:${f.type};base64,${base64}`
+      )) as ImageInfo
       data.push({
         name: f.name,
         type: f.type,
         base64,
+        width,
+        height,
       })
     }
     setLocalImgData((preData) => [...data, ...preData])
   }
 
+  const handleSubmit = () => {
+    if (!localImgData) return
+    localImgData.forEach(async ({ name, base64 }) => {
+      const r = await dispath(
+        createReposContent(
+          {
+            path: name,
+            content: base64,
+          },
+          'file'
+        )
+      )
+      console.log(r, 'r')
+    })
+  }
+
   return (
-    <Popover title="上传图片" visible={visible} onClose={setVisible}>
+    <Popover
+      title="上传图片"
+      visible={visible}
+      onClose={setVisible}
+      onSubmit={handleSubmit}
+    >
       <div className="flex">
         <Upload ref={uploadElm} className="flex-1" onChange={handleChange}>
           <div

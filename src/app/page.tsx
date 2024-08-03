@@ -83,7 +83,9 @@ export default function Home() {
     const imgList = content
       .filter(({ name, type }) => type === 'file' && name !== LOGFILENAME)
       .map((item) => {
-        const { width, height } = getGivenImageInfo(item.sha) as ImageInfo
+        const { width = 200, height = 200 } = getGivenImageInfo(
+          item.sha
+        ) as ImageInfo
         return {
           ...item,
           width,

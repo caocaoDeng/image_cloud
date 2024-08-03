@@ -23,3 +23,23 @@ export const readFile2ArrayBuffer = (file: File): Promise<ArrayBuffer> => {
     reader.readAsArrayBuffer(file)
   })
 }
+
+export interface ImageInfo {
+  width: number
+  height: number
+  message?: string
+}
+
+export const getImageInfo = (data: File | string): Promise<ImageInfo> => {
+  const src =
+    typeof data === 'string' ? data : URL.createObjectURL(new Blob([data]))
+  return new Promise<ImageInfo>((res, rej) => {
+    const image = new Image()
+    image.src = src
+    image.onload = () => res({ width: image.width, height: image.height })
+    image.onerror = () => rej({ message: '图片加载失败' })
+    image.onabort = () => rej({ message: '图片加载失败' })
+  }).finally(() => {
+    URL.revokeObjectURL(src)
+  })
+}

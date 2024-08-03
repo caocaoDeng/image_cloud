@@ -30,6 +30,7 @@ export default forwardRef(function UploadImgPop(
   }
 
   const handleSubmit = async () => {
+    if (!dirName) return setValid(true)
     await dispath(
       createReposContent(
         {

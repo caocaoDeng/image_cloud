@@ -60,11 +60,11 @@ export const fetchReposContent = () => {
       const { user, repository } = getState()
       const { login } = user.user as User
       const { name } = repository.repos as Repository
-      const content = await api.getReposContent({
+      const content = (await api.getReposContent({
         owner: login,
         repo: name,
         path: BASE_PATH,
-      })
+      })) as ReposContent[]
       dispatch(setContent(content))
     } catch (error) {
       console.log(error, 99)
