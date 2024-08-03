@@ -30,7 +30,7 @@ const api = {
 
   // 获取repo内容
   getReposContent({ owner, repo, path }: UpdateReposParams) {
-    return request<ReposContent[]>(
+    return request<ReposContent[] | ReposContent>(
       'GET',
       `/repos/${owner}/${repo}/contents/${path}`
     )

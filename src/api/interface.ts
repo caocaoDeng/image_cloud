@@ -33,6 +33,7 @@ export interface ReposContent {
   path: string
   sha: string
   type: string
+  content: string
   html_url: string
   download_url: string
 }
