@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { State, Dispatch } from './index'
 import api from '@/api'
 import { ReposContent, Repository, User } from '@/api/interface'
-import { BASE_PATH } from '@/utils/const'
 
 interface InitialState {
   repos: Repository | null | undefined
@@ -51,12 +50,17 @@ export const createRepos = () => {
   }
 }
 
+/**
+ * 获取 repos 某路径下的内容
+ * @param path 日志路径
+ * @returns repos content
+ */
 export const fetchReposContent = (path?: string) => {
   return async (dispatch: Dispatch, getState: () => State) => {
-    const { user, repository } = getState()
+    const { user, repository, config } = getState()
     const { login } = user.user as User
     const { name } = repository.repos as Repository
-    const fullPath = path ? `${BASE_PATH}/${path}` : BASE_PATH
+    const fullPath = config.entryPath.join('') + (path ? `/${path}` : '')
     const reposContent = await api.getReposContent({
       owner: login,
       repo: name,
@@ -77,11 +81,11 @@ export const createReposContent = ({
   path,
   content,
 }: CreateRepoParams) => {
-  const fullPath = `${BASE_PATH}/${path}`
   return async (dispatch: Dispatch, getState: () => State) => {
-    const { user, repository } = getState()
+    const { user, repository, config } = getState()
     const { login, name, email } = user.user as User
     const { name: repoName } = repository.repos as Repository
+    const fullPath = config.entryPath.join('') + `/${path}`
     const res = await api.updateReposContent({
       sha,
       owner: login,

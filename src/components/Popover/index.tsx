@@ -27,7 +27,6 @@ export default function Popover({
   }
 
   useEffect(() => {
-    console.log(visible)
     setStatus(!!visible)
   }, [visible])
 
