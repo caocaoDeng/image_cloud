@@ -5,6 +5,7 @@ import { useAppSelector, useAppDispatch } from '@/store/hooks'
 import { InitialState, setAuthToken, setUserInfo } from '@/store/user'
 import {
   createRepos,
+  createReposContent,
   fetchReposContent,
   fetchUserRepos,
   setContent,
@@ -19,8 +20,7 @@ import WaterFall from '@/components/WaterFall'
 export type ExtendReposContent = ReposContent & ImageInfo
 
 export default function Home() {
-  const { repository } = useAppSelector((store) => store)
-  const { content } = repository
+  const { content } = useAppSelector((store) => store.repository)
   const dispatch = useAppDispatch()
 
   const [data, setData] = useState<ExtendReposContent[]>([])
@@ -44,21 +44,37 @@ export default function Home() {
 
   // 获取仓库内容
   const getReposContent = async () => {
-    const reposContent = (await dispatch(fetchReposContent())) as ReposContent[]
-    await dispatch(setContent(reposContent))
+    try {
+      const reposContent = (await dispatch(
+        fetchReposContent()
+      )) as ReposContent[]
+      await dispatch(setContent(reposContent))
+    } catch (error: any) {
+      // 未查询到路径进行初始化
+      const { status } = error
+      if (status === 404) {
+        const r = await dispatch(
+          createReposContent({
+            path: LOGFILENAME,
+            content: '',
+          })
+        )
+        await dispatch(setContent([r]))
+      }
+    }
   }
 
   // 读取日志文件，存储到本地
   const readLogsFile = async () => {
     const logFile = content.find(({ name }) => name === LOGFILENAME)
-    if (!logFile) return null
+    if (!logFile) return
     const logs = (await dispatch(
       fetchReposContent(LOGFILENAME)
     )) as ReposContent
     // 解析base64
     const logsJson: LogsData = {
       sha: logs.sha,
-      content: JSON.parse(atob(logs.content)),
+      content: JSON.parse(atob(logs.content) || '[]'),
     }
     localStorage.setItem(LOGKEY, JSON.stringify(logsJson))
   }
@@ -69,8 +85,7 @@ export default function Home() {
   }
 
   const updateData = async () => {
-    // 减少请求
-    !localStorage.getItem(LOGKEY) && (await readLogsFile())
+    await readLogsFile()
     const imgList = content
       .filter(({ name, type }) => type === 'file' && name !== LOGFILENAME)
       .map((item) => {

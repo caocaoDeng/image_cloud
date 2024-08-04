@@ -12,11 +12,12 @@ import { createReposContent, setContent } from '@/store/repository'
 import {
   getImageInfo,
   ImgOnloadInfo,
+  ImageInfo,
   LogsData,
   readFile2ArrayBuffer,
 } from '@/utils'
-import { ImageInfo } from '@/utils'
 import { LOGFILENAME, LOGKEY } from '@/utils/const'
+import { ReposContent } from '@/api/interface'
 import Popover from '@/components/Popover'
 import Upload, { IUploadEmitEvent } from '@/components/Upload'
 
@@ -75,30 +76,41 @@ export default forwardRef(function UploadImgPop(
     const logsStr = localStorage.getItem(LOGKEY)
     const { sha, content = [] }: LogsData = JSON.parse(logsStr || '{}')
     const updatedContent = [...logs, ...content]
-    const contentStr = JSON.stringify(updatedContent)
-    const base64 = btoa(contentStr)
+    const base64 = btoa(JSON.stringify(updatedContent))
     localStorage.setItem(
       LOGKEY,
       JSON.stringify({
         sha,
-        content: contentStr,
+        content: updatedContent,
       })
     )
-    dispath(createReposContent({ path: LOGFILENAME, content: base64 }))
+    dispath(createReposContent({ sha, path: LOGFILENAME, content: base64 }))
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!localImgData) return
-    const logs: ImageInfo[] = []
-    localImgData.forEach(async ({ name, base64, width, height }) => {
-      const content = await dispath(
-        createReposContent({ path: name, content: base64 })
-      )
-      logs.push({ width, height, sha: content.sha })
-      dispath(setContent([content]))
-      setLocalImgData([])
-      setVisible(false)
+    const waitQueue = localImgData.map(({ name, base64, width, height }) => {
+      return new Promise<{
+        width: number
+        height: number
+        content: ReposContent
+      }>(async (resolve) => {
+        const content = await dispath(
+          createReposContent({ path: name, content: base64 })
+        )
+        resolve({ width, height, content })
+      })
     })
+    const result = await Promise.all(waitQueue)
+    const logs: ImageInfo[] = result.map(({ width, height, content }) => ({
+      width,
+      height,
+      sha: content.sha,
+    }))
+    const reposContent = result.map((item) => item.content)
+    dispath(setContent(reposContent))
+    setLocalImgData([])
+    setVisible(false)
     // 更新日志文件
     updateLogs(logs)
   }
