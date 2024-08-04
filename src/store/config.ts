@@ -7,6 +7,8 @@ export interface InitialState {
   entryPath: string[]
 }
 
+export type ContentAction = 'replace' | 'push'
+
 export const initialState: InitialState = {
   isCollapsed: false,
   base: BASE_PATH,
@@ -25,8 +27,19 @@ export const configSlice = createSlice({
       state.base = payload
     },
 
-    setEntryPath: (state, { payload }: PayloadAction<string>) => {
-      state.entryPath = [...state.entryPath, payload]
+    setEntryPath: (
+      state,
+      action: PayloadAction<{
+        actionType?: ContentAction
+        entryPath: string[] | string
+      }>
+    ) => {
+      const { actionType = 'push', entryPath } = action.payload
+      if (actionType === 'push') {
+        state.entryPath = [...state.entryPath, entryPath as string]
+      } else {
+        state.entryPath = entryPath as string[]
+      }
     },
   },
 })

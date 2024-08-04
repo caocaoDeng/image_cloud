@@ -4,10 +4,16 @@
   @apply flex shrink-0 h-16 items-center border-b;
   .title {
     color: rgb(var(--foreground-active));
-    @apply w-64 pl-2.5 text-xl font-semibold;
+    @apply w-64 pl-2.5 text-xl font-semibold shrink-0;
   }
   .nav {
-    @apply flex-1 h-full;
+    color: rgb(var(--foreground));
+    @apply flex flex-nowrap gap-1 flex-1 px-2 truncate cursor-pointer text-sm;
+    .nav-item {
+      &:hover {
+        color: rgb(var(--foreground-active));
+      }
+    }
   }
   .actions {
     @apply flex flex-nowrap items-center gap-2 pr-2.5;

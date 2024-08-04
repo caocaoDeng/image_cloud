@@ -35,8 +35,9 @@ export default function Sider() {
     )) as ReposContent[]
     dispath(setContent({ actionType: 'replace', content: reposContent }))
     dispath(setBase(name))
-    dispath(setEntryPath(`/${name}`))
+    dispath(setEntryPath({ entryPath: `/${name}` }))
     // 进入后取消激活样式
+    setIcon('icon-shanchu')
     setActiveDir('')
     setLoading(false)
   }

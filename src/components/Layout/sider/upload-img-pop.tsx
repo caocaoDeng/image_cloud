@@ -72,7 +72,7 @@ export default forwardRef(function UploadImgPop(
   }
 
   // 更新日志文件
-  const updateLogs = (logs: ImageInfo[]) => {
+  const updateLogs = async (logs: ImageInfo[]) => {
     const logsStr = localStorage.getItem(LOGKEY)
     const { sha, content = [] }: LogsData = JSON.parse(logsStr || '{}')
     const updatedContent = [...logs, ...content]
@@ -84,7 +84,10 @@ export default forwardRef(function UploadImgPop(
         content: updatedContent,
       })
     )
-    dispath(createReposContent({ sha, path: LOGFILENAME, content: base64 }))
+    // TODO 替换新的日志内容
+    await dispath(
+      createReposContent({ sha, path: LOGFILENAME, content: base64 })
+    )
   }
 
   const handleClose = () => {
@@ -113,10 +116,10 @@ export default forwardRef(function UploadImgPop(
       sha: content.sha,
     }))
     const reposContent = result.map((item) => item.content)
-    dispath(setContent({ content: reposContent }))
-    handleClose()
     // 更新日志文件
-    updateLogs(logs)
+    await updateLogs(logs)
+    await dispath(setContent({ content: reposContent }))
+    handleClose()
   }
 
   return (
