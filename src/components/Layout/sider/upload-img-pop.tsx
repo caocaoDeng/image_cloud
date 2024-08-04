@@ -113,7 +113,7 @@ export default forwardRef(function UploadImgPop(
       sha: content.sha,
     }))
     const reposContent = result.map((item) => item.content)
-    dispath(setContent(reposContent))
+    dispath(setContent({ content: reposContent }))
     handleClose()
     // 更新日志文件
     updateLogs(logs)

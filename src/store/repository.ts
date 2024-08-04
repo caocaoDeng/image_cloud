@@ -3,10 +3,12 @@ import { State, Dispatch } from './index'
 import api from '@/api'
 import { ReposContent, Repository, User } from '@/api/interface'
 
-interface InitialState {
+export interface InitialState {
   repos: Repository | null | undefined
   content: ReposContent[]
 }
+
+export type ContentAction = 'replace' | 'push'
 
 const initialState: InitialState = {
   repos: undefined,
@@ -21,8 +23,26 @@ export const repositorySlice = createSlice({
       state.repos = payload
     },
 
-    setContent(state, { payload }: PayloadAction<ReposContent[]>) {
-      state.content = [...payload, ...state.content]
+    setContent(
+      state,
+      action: PayloadAction<{
+        actionType?: ContentAction
+        content: ReposContent[]
+      }>
+    ) {
+      const { actionType = 'push', content } = action.payload
+      switch (actionType) {
+        case 'push':
+          state.content = [...content, ...state.content]
+          break
+
+        case 'replace':
+          state.content = [...content]
+          break
+
+        default:
+          break
+      }
     },
   },
 })
@@ -52,7 +72,7 @@ export const createRepos = () => {
 
 /**
  * 获取 repos 某路径下的内容
- * @param path 日志路径
+ * @param path 路径
  * @returns repos content
  */
 export const fetchReposContent = (path?: string) => {

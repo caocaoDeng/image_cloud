@@ -36,18 +36,11 @@ export default forwardRef(function UploadImgPop(
 
   const handleSubmit = async () => {
     if (!dirName) return setValid(true)
-    const content = await dispath(
+    let content = await dispath(
       createReposContent({ path: `${dirName}/log.txt`, content: '' })
     )
-    await dispath(
-      setContent([
-        {
-          ...content,
-          name: dirName,
-          type: 'dir',
-        },
-      ])
-    )
+    content = { ...content, name: dirName, type: 'dir' }
+    await dispath(setContent({ content: [content] }))
     handleClose()
   }
 

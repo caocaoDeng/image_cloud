@@ -48,7 +48,7 @@ export default function Home() {
       const reposContent = (await dispatch(
         fetchReposContent()
       )) as ReposContent[]
-      await dispatch(setContent(reposContent))
+      await dispatch(setContent({ content: reposContent }))
     } catch (error: any) {
       // 未查询到路径进行初始化
       const { status } = error
@@ -59,7 +59,7 @@ export default function Home() {
             content: '',
           })
         )
-        await dispatch(setContent([r]))
+        await dispatch(setContent({ content: [r] }))
       }
     }
   }
