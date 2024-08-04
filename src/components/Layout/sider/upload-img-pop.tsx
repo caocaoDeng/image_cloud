@@ -87,6 +87,11 @@ export default forwardRef(function UploadImgPop(
     dispath(createReposContent({ sha, path: LOGFILENAME, content: base64 }))
   }
 
+  const handleClose = () => {
+    setLocalImgData([])
+    setVisible(false)
+  }
+
   const handleSubmit = async () => {
     if (!localImgData) return
     const waitQueue = localImgData.map(({ name, base64, width, height }) => {
@@ -109,8 +114,7 @@ export default forwardRef(function UploadImgPop(
     }))
     const reposContent = result.map((item) => item.content)
     dispath(setContent(reposContent))
-    setLocalImgData([])
-    setVisible(false)
+    handleClose()
     // 更新日志文件
     updateLogs(logs)
   }
@@ -119,7 +123,7 @@ export default forwardRef(function UploadImgPop(
     <Popover
       title="上传图片"
       visible={visible}
-      onClose={setVisible}
+      onClose={handleClose}
       onSubmit={handleSubmit}
     >
       <div className="flex">

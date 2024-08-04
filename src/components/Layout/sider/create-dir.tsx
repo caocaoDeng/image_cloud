@@ -29,6 +29,11 @@ export default forwardRef(function UploadImgPop(
     setDirName(value)
   }
 
+  const handleClose = () => {
+    setDirName('')
+    setVisible(false)
+  }
+
   const handleSubmit = async () => {
     if (!dirName) return setValid(true)
     const content = await dispath(
@@ -43,8 +48,7 @@ export default forwardRef(function UploadImgPop(
         },
       ])
     )
-    setDirName('')
-    setVisible(false)
+    handleClose()
   }
 
   useImperativeHandle(
@@ -59,7 +63,7 @@ export default forwardRef(function UploadImgPop(
     <Popover
       title="创建目录"
       visible={visible}
-      onClose={setVisible}
+      onClose={handleClose}
       onSubmit={handleSubmit}
     >
       <form>
@@ -70,7 +74,7 @@ export default forwardRef(function UploadImgPop(
             className="mt-1"
             placeholder="避免输入空格"
             required={valid}
-            defaultValue={dirName}
+            value={dirName}
             onChange={handleChange}
           />
           {valid ? <p className="error">请填写目录名称</p> : <></>}
