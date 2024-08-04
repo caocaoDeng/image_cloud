@@ -1,18 +1,45 @@
 import { useEffect, useRef, useState } from 'react'
-import { useAppSelector } from '@/store/hooks'
+import { fetchReposContent, setContent } from '@/store/repository'
+import { setBase, setEntryPath } from '@/store/config'
+import { useAppSelector, useAppDispatch } from '@/store/hooks'
 import { ReposContent } from '@/api/interface'
-import { BASE_PATH } from '@/utils/const'
 import CreateDir, { CreateDirPopEmitEvent } from './create-dir'
 import UploadImgPop, { UploadImgPopEmitEvent } from './upload-img-pop'
 import styles from './sider.module.scss'
 
 export default function Sider() {
+  const dispath = useAppDispatch()
+  const { base, entryPath } = useAppSelector((store) => store.config)
   const { content } = useAppSelector((store) => store.repository)
 
   const imgPopElm = useRef<UploadImgPopEmitEvent>(null)
   const dirPopElm = useRef<CreateDirPopEmitEvent>(null)
 
   const [dir, setDir] = useState<ReposContent[]>([])
+  const [activeDir, setActiveDir] = useState<string>('')
+  const [icon, setIcon] = useState<string>('icon-shanchu')
+  const [loading, setLoading] = useState<boolean>(false)
+
+  /**
+   * 查询某路径下的内容
+   * @param name path name
+   */
+  const handleQueryPath = async (name: string) => {
+    if (loading) return
+    setIcon('icon-loading1')
+    setActiveDir(name)
+    setLoading(true)
+    // 获取content
+    const reposContent = (await dispath(
+      fetchReposContent(name)
+    )) as ReposContent[]
+    dispath(setContent({ actionType: 'replace', content: reposContent }))
+    dispath(setBase(name))
+    dispath(setEntryPath(`/${name}`))
+    // 进入后取消激活样式
+    setActiveDir('')
+    setLoading(false)
+  }
 
   useEffect(() => {
     const dirData = content.filter(({ type }) => type === 'dir')
@@ -23,7 +50,7 @@ export default function Sider() {
     <nav className={styles.nav}>
       <div className="px-2.5 pt-5 pb-2.5">
         <input
-          defaultValue={BASE_PATH}
+          defaultValue={base}
           type="text"
           disabled
           className="border-0"
@@ -34,10 +61,21 @@ export default function Sider() {
         />
       </div>
       <ul className="flex-1 px-2.5 overflow-auto el-scrollbar">
-        {dir.map(({ name, sha }, index) => (
-          <li key={sha + index} className={styles['dir-item']}>
+        {dir.map(({ name }, index) => (
+          <li
+            key={name + index}
+            className={`${styles['dir-item']} ${
+              !loading ? styles.hovered : ''
+            } ${activeDir === name ? styles.active : ''}`}
+            onClick={() => handleQueryPath(name)}
+          >
             <span className="iconfont icon-24gf-folder"></span>
             <span className="flex-1 truncate">{name}</span>
+            <span
+              className={`hidden iconfont ${icon} ${styles['action-icon']} ${
+                loading ? 'animate-spin' : ''
+              }`}
+            ></span>
           </li>
         ))}
       </ul>

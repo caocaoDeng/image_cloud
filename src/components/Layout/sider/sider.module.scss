@@ -4,10 +4,26 @@
   border-right-color: rgb(var(--border-style));
   @apply flex flex-col w-64 h-full border-r text-sm;
   .dir-item {
-    &:hover {
-      color: rgb(var(--foreground-active));
+    &.hovered {
+      &:hover {
+        color: rgb(var(--foreground-active));
+        @apply bg-blue-600;
+        & .action-icon {
+          @apply block;
+        }
+      }
     }
-    @apply flex items-center gap-3 p-2 mb-1 cursor-pointer rounded hover:bg-blue-600 transition-all;
+    &.active {
+      color: rgb(var(--foreground-active));
+      @apply bg-blue-600;
+      & .action-icon {
+        @apply block;
+      }
+    }
+    @apply flex items-center gap-3 p-2 mb-1 cursor-pointer rounded transition-all;
+    .action-icon {
+      @apply hidden hover:scale-105;
+    }
   }
   .search {
     @apply w-24 transition-all;
