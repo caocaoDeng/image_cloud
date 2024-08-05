@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { ExtendReposContent } from '@/app/page'
+import styles from './waterfall.module.scss'
 
 export default function WaterFall({
   maxWidth,
@@ -13,6 +14,10 @@ export default function WaterFall({
 }) {
   const wfContainerElm = useRef<HTMLDivElement>(null)
   const [value, setValue] = useState<ExtendReposContent[]>([])
+  const [actions, setActions] = useState<string[]>([
+    'icon-fuzhi',
+    'icon-xiazai',
+  ])
 
   /**
    * 获取基本信息
@@ -70,7 +75,7 @@ export default function WaterFall({
         return (
           <div
             key={sha + index}
-            className="absolute border rounded transition-all"
+            className="absolute border rounded transition-all cursor-pointer"
             style={{ borderColor: 'rgb(var(--border-style))', ...style }}
           >
             <Image
@@ -81,6 +86,14 @@ export default function WaterFall({
               src={download_url}
               alt="img"
             />
+            <div className="flex gap-2 absolute top-2 right-2">
+              {actions.map((item) => (
+                <span
+                  key={item}
+                  className={`iconfont ${item} flex items-center justify-center w-6 h-6 rounded leading-none ${styles['action-item']}`}
+                ></span>
+              ))}
+            </div>
           </div>
         )
       })}

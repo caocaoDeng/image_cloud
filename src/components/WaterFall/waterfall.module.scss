@@ -1,0 +1,8 @@
+.action-item {
+  color: rgb(var(--foreground));
+  background-color: rgba(0, 0, 0, 0.5);
+  &:hover {
+    color: rgb(var(--foreground-active));
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+}
