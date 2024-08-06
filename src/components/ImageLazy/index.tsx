@@ -100,7 +100,12 @@ export default function ImageLazy({
           <p>{text}</p>
         </div>
       ) : (
-        <Image className="w-full h-full" {...rest} src={loadSrc}></Image>
+        <Image
+          className="w-full h-full"
+          {...rest}
+          src={loadSrc}
+          loader={(img) => img.src}
+        ></Image>
       )}
     </div>
   )
