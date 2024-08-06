@@ -74,3 +74,15 @@ export const getGivenImageInfo = (sha: string) => {
   const { content }: LogsData = JSON.parse(logsStr)
   return content.find(({ sha: imgSha }) => imgSha === sha) || {}
 }
+
+/**
+ * 下载函数
+ * @param url 资源地址
+ * @param name 文件名称
+ */
+export const download = (url: string, name: string) => {
+  const tag_a = document.createElement('a')
+  tag_a.setAttribute('href', url)
+  tag_a.setAttribute('download', name)
+  tag_a.click()
+}

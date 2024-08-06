@@ -1,7 +1,28 @@
+'use client'
 import { useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
 import { ExtendReposContent } from '@/app/page'
+import { download } from '@/utils/index'
+import ImageLazy from '../ImageLazy'
 import styles from './waterfall.module.scss'
+
+const actionsList = [
+  {
+    action: 'copy',
+    icon: 'icon-fuzhi',
+  },
+  {
+    action: 'download',
+    icon: 'icon-xiazai',
+  },
+]
+
+export interface Action {
+  type: string
+  payload: {
+    name: string
+    url: string
+  }
+}
 
 export default function WaterFall({
   maxWidth,
@@ -14,10 +35,6 @@ export default function WaterFall({
 }) {
   const wfContainerElm = useRef<HTMLDivElement>(null)
   const [value, setValue] = useState<ExtendReposContent[]>([])
-  const [actions, setActions] = useState<string[]>([
-    'icon-fuzhi',
-    'icon-xiazai',
-  ])
 
   /**
    * 获取基本信息
@@ -56,6 +73,13 @@ export default function WaterFall({
     })
   }
 
+  const handleActions = async ({ type, payload }: Action) => {
+    if (type === 'copy') {
+      return await navigator.clipboard.writeText(payload.url)
+    }
+    return download(payload.url, payload.name)
+  }
+
   const updateData = () => {
     const imgData = getPosition()
     setValue(imgData)
@@ -71,26 +95,33 @@ export default function WaterFall({
 
   return (
     <div className="relative w-full" ref={wfContainerElm}>
-      {value.map(({ width, height, download_url, sha, style }, index) => {
+      {value.map(({ name, width, height, download_url, sha, style }, index) => {
         return (
           <div
             key={sha + index}
-            className="absolute border rounded transition-all cursor-pointer"
+            className="overflow-hidden absolute border rounded transition-all cursor-pointer"
             style={{ borderColor: 'rgb(var(--border-style))', ...style }}
           >
-            <Image
-              className="w-full h-full"
-              loader={(img) => img.src}
+            <ImageLazy
+              className="w-full h-full transition-all hover:scale-110"
+              target={wfContainerElm.current?.parentElement}
+              lazy={true}
+              src={download_url}
               width={width}
               height={height}
-              src={download_url}
-              alt="img"
+              alt={name}
             />
             <div className="flex gap-2 absolute top-2 right-2">
-              {actions.map((item) => (
+              {actionsList.map(({ action, icon }) => (
                 <span
-                  key={item}
-                  className={`iconfont ${item} flex items-center justify-center w-6 h-6 rounded leading-none ${styles['action-item']}`}
+                  key={action}
+                  className={`iconfont ${icon} flex items-center justify-center w-6 h-6 rounded leading-none ${styles['action-item']}`}
+                  onClick={() =>
+                    handleActions({
+                      type: action,
+                      payload: { name, url: download_url },
+                    })
+                  }
                 ></span>
               ))}
             </div>
