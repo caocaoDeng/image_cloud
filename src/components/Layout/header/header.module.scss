@@ -1,5 +1,5 @@
 .header {
-  background-color: rgba(var(--background), 0.98);
+  background-color: rgb(var(--background));
   border-bottom-color: rgb(var(--border-style));
   @apply flex shrink-0 h-16 items-center border-b;
   .title {

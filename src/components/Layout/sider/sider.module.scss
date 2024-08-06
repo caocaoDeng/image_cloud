@@ -6,16 +6,14 @@
   .dir-item {
     &.hovered {
       &:hover {
-        color: rgb(var(--foreground-active));
-        @apply bg-blue-600;
+        @apply text-white bg-blue-500;
         & .action-icon {
           @apply block;
         }
       }
     }
     &.active {
-      color: rgb(var(--foreground-active));
-      @apply bg-blue-600;
+      @apply text-white bg-blue-500;
       & .action-icon {
         @apply block;
       }
@@ -37,6 +35,6 @@
   .btn {
     color: rgb(var(--foreground));
     background-color: rgb(var(--placeholder));
-    @apply w-max px-2.5 py-1.5 text-xs leading-5 font-normal rounded hover:bg-blue-600 hover:text-white;
+    @apply w-max px-2.5 py-1.5 text-xs leading-5 font-normal rounded hover:bg-blue-500 hover:text-white;
   }
 }

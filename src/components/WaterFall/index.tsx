@@ -99,8 +99,8 @@ export default function WaterFall({
         return (
           <div
             key={sha + index}
-            className="overflow-hidden absolute border rounded transition-all cursor-pointer"
-            style={{ borderColor: 'rgb(var(--border-style))', ...style }}
+            className="overflow-hidden absolute rounded transition-all cursor-pointer"
+            style={{ ...style }}
           >
             <ImageLazy
               className="w-full h-full transition-all hover:scale-110"

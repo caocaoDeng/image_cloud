@@ -3,25 +3,26 @@
 @tailwind utilities;
 
 :root {
+   /* 前景色 */
+   --foreground: 171, 172, 176;
+   /* 前景色激活 */
+   --foreground-active: 255, 255, 255;
   /* boorder 颜色 */
   --border-style: 0, 0, 0;
   /* 提示颜色 */
   --placeholder: 41, 45, 49;
-  /* 前景色 */
-  --foreground: 171, 172, 176;
-  /* 前景色激活 */
-  --foreground-active: 255, 255, 255;
-  /* 29, 31, 34 */
+  /* 背景色 */
   --background: 35, 37, 41;
+  --background-adjacent: 29, 31, 34;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground: 23, 23, 23;
-    --border-style: 233, 233, 233;
-    --foreground-active: 0, 0, 0;
-    --background: 255, 255, 255;
-  }
+.light {
+  --foreground: 23, 23, 23;
+  --foreground-active: 0, 0, 0;
+  --border-style: 233, 233, 233;
+  --placeholder: 244, 244, 244;
+  --background: 255, 255, 255;
+  --background-adjacent: 248, 248, 248;
 }
 
 ::-webkit-scrollbar {
