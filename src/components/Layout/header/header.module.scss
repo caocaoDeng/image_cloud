@@ -17,7 +17,7 @@
   }
   .actions {
     @apply flex flex-nowrap items-center gap-2 pr-2.5;
-    i {
+    i,.avatar {
       color: rgb(var(--foreground-active));
       @apply text-2xl cursor-pointer;
     }

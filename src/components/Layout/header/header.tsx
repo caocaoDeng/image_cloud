@@ -1,11 +1,13 @@
+import Image from 'next/image'
 import { useAppSelector, useAppDispatch } from '@/store/hooks'
 import { fetchReposContent, setContent } from '@/store/repository'
 import { setBase, setEntryPath } from '@/store/config'
-import { ReposContent } from '@/api/interface'
+import { ReposContent, User } from '@/api/interface'
 import styles from './header.module.scss'
 
 export default function Header() {
   const dispath = useAppDispatch()
+  const userInfo = useAppSelector((store) => store.user.user) as User
   const entryPath = useAppSelector((store) => store.config.entryPath)
 
   const handleQueryPath = async (index: number) => {
@@ -38,7 +40,13 @@ export default function Header() {
       </ul>
       <div className={styles.actions}>
         <i className="iconfont icon-dark"></i>
-        <i className="iconfont icon-user"></i>
+        <Image
+          className={styles.avatar}
+          src={userInfo?.avatar_url}
+          width={30}
+          height={30}
+          alt="avatar"
+        />
       </div>
     </header>
   )
