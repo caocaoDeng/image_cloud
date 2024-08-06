@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { useAppSelector, useAppDispatch } from '@/store/hooks'
 import { fetchReposContent, setContent } from '@/store/repository'
-import { setBase, setEntryPath } from '@/store/config'
+import { setBase, setEntryPath, setTheme } from '@/store/config'
 import { ReposContent, User } from '@/api/interface'
 import styles from './header.module.scss'
 
@@ -39,7 +39,10 @@ export default function Header() {
         ))}
       </ul>
       <div className={styles.actions}>
-        <i className="iconfont icon-dark"></i>
+        <i
+          className="iconfont icon-dark"
+          onClick={() => dispath(setTheme())}
+        ></i>
         <Image
           className={styles.avatar}
           src={userInfo?.avatar_url}

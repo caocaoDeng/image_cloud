@@ -1,8 +1,17 @@
-.action-item {
-  color: rgb(var(--foreground));
-  background-color: rgba(0, 0, 0, 0.5);
-  &:hover {
-    color: rgb(var(--foreground-active));
-    background-color: rgba(0, 0, 0, 0.6);
+.water-fall-item {
+  @apply overflow-hidden absolute rounded transition-all;
+  .actions {
+    @apply hidden absolute top-2 right-2;
+    .action-item {
+      background-color: rgba(0, 0, 0, 0.2);
+      @apply flex items-center justify-center w-6 h-6 rounded leading-none cursor-pointer text-white;
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.3);
+        @apply text-white;
+      }
+    }
+  }
+  &:hover .actions {
+    @apply flex gap-2;
   }
 }

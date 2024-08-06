@@ -99,23 +99,27 @@ export default function WaterFall({
         return (
           <div
             key={sha + index}
-            className="overflow-hidden absolute rounded transition-all cursor-pointer"
+            className={styles['water-fall-item']}
             style={{ ...style }}
           >
             <ImageLazy
               className="w-full h-full transition-all hover:scale-110"
               target={wfContainerElm.current?.parentElement}
               lazy={true}
+              style={{
+                textColor: 'rgb(var(--foreground))',
+                bgColor: 'rgb(var(--background))',
+              }}
               src={download_url}
               width={width}
               height={height}
               alt={name}
             />
-            <div className="flex gap-2 absolute top-2 right-2">
+            <div className={styles.actions}>
               {actionsList.map(({ action, icon }) => (
                 <span
                   key={action}
-                  className={`iconfont ${icon} flex items-center justify-center w-6 h-6 rounded leading-none ${styles['action-item']}`}
+                  className={`iconfont ${icon} ${styles['action-item']}`}
                   onClick={() =>
                     handleActions({
                       type: action,

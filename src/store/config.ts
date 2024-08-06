@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { BASE_PATH } from '@/utils/const'
 
 export interface InitialState {
+  theme: 'dark' | 'light'
   isCollapsed: boolean
   base: string
   entryPath: string[]
@@ -10,6 +11,7 @@ export interface InitialState {
 export type ContentAction = 'replace' | 'push'
 
 export const initialState: InitialState = {
+  theme: 'dark',
   isCollapsed: false,
   base: BASE_PATH,
   entryPath: [BASE_PATH],
@@ -19,6 +21,10 @@ export const configSlice = createSlice({
   name: 'config',
   initialState,
   reducers: {
+    setTheme: (state) => {
+      state.theme = state.theme === 'dark' ? 'light' : 'dark'
+    },
+
     setCollapsed: (state) => {
       state.isCollapsed = !state.isCollapsed
     },
@@ -44,6 +50,7 @@ export const configSlice = createSlice({
   },
 })
 
-export const { setCollapsed, setBase, setEntryPath } = configSlice.actions
+export const { setTheme, setCollapsed, setBase, setEntryPath } =
+  configSlice.actions
 
 export default configSlice.reducer

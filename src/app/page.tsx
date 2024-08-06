@@ -20,8 +20,9 @@ import WaterFall from '@/components/WaterFall'
 export type ExtendReposContent = ReposContent & ImageInfo
 
 export default function Home() {
-  const { content } = useAppSelector((store) => store.repository)
   const dispatch = useAppDispatch()
+  const { content } = useAppSelector((store) => store.repository)
+  const theme = useAppSelector((store) => store.config.theme)
 
   const [data, setData] = useState<ExtendReposContent[]>([])
 
@@ -111,8 +112,10 @@ export default function Home() {
   }, [])
 
   return (
-    <Layout>
-      <WaterFall maxWidth={196} gap={12} data={data}></WaterFall>
-    </Layout>
+    <div className={theme === 'light' ? 'light' : ''}>
+      <Layout>
+        <WaterFall maxWidth={196} gap={12} data={data}></WaterFall>
+      </Layout>
+    </div>
   )
 }

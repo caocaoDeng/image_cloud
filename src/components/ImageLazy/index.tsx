@@ -12,10 +12,15 @@ export default function ImageLazy({
   lazy = false,
   className,
   src,
+  style = { textColor: 'rgb(0, 0, 0)', bgColor: 'rgb(255, 255, 255)' },
   ...rest
 }: {
   target?: Window | HTMLElement | null
   lazy?: boolean
+  style?: {
+    textColor: string
+    bgColor: string
+  }
   className: string
   width: number
   height: number
@@ -91,7 +96,10 @@ export default function ImageLazy({
   return (
     <div ref={elm} className={`relative inline-block ${className}`}>
       {loading || text === loadText.ERROR ? (
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-sm text-zinc-200">
+        <div
+          className="absolute inset-0 flex flex-col items-center justify-center text-sm"
+          style={{ color: style.textColor, backgroundColor: style.bgColor }}
+        >
           <p
             className={`iconfont icon-loading1 animate-spin ${
               text === loadText.ERROR ? 'hidden' : ''
