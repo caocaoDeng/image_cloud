@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { ExtendReposContent } from '@/app/page'
 import { download } from '@/utils/index'
 import ImageLazy from '../ImageLazy'
+import ImagePreview from '../ImagePreview'
 import styles from './waterfall.module.scss'
 
 const actionsList = [
@@ -35,6 +36,9 @@ export default function WaterFall({
 }) {
   const wfContainerElm = useRef<HTMLDivElement>(null)
   const [value, setValue] = useState<ExtendReposContent[]>([])
+  const [isPreview, setIsPreview] = useState<boolean>(false)
+  const [startIndex, setStartIndex] = useState<number>(0)
+  const [srcList, setSrcList] = useState<string[]>([])
 
   /**
    * 获取基本信息
@@ -73,6 +77,17 @@ export default function WaterFall({
     })
   }
 
+  // 获取图片地址列表
+  const getImgSrc = () => {
+    const list = data.map((item) => item.download_url)
+    setSrcList(list)
+  }
+
+  const previewImage = (index: number) => {
+    setStartIndex(index)
+    setIsPreview(true)
+  }
+
   const handleActions = async ({ type, payload }: Action) => {
     if (type === 'copy') {
       return await navigator.clipboard.writeText(payload.url)
@@ -86,6 +101,7 @@ export default function WaterFall({
   }
 
   useEffect(() => {
+    getImgSrc()
     updateData()
     window.addEventListener('resize', updateData)
     return () => {
@@ -101,6 +117,7 @@ export default function WaterFall({
             key={sha + index}
             className={styles['water-fall-item']}
             style={{ ...style }}
+            onClick={() => previewImage(index)}
           >
             <ImageLazy
               className="w-full h-full transition-all hover:scale-110"
@@ -132,6 +149,12 @@ export default function WaterFall({
           </div>
         )
       })}
+      <ImagePreview
+        visible={isPreview}
+        startIndex={startIndex}
+        data={srcList}
+        onClose={setIsPreview}
+      />
     </div>
   )
 }

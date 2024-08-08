@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 4634782 */
-  src: url('iconfont.woff2?t=1722857066352') format('woff2'),
-       url('iconfont.woff?t=1722857066352') format('woff'),
-       url('iconfont.ttf?t=1722857066352') format('truetype');
+  src: url('iconfont.woff2?t=1723102414340') format('woff2'),
+       url('iconfont.woff?t=1723102414340') format('woff'),
+       url('iconfont.ttf?t=1723102414340') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,54 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-xiangyou-copy:before {
+  content: "\eac8";
+}
+
+.icon-xiangyou:before {
+  content: "\e638";
+}
+
+.icon-23fangda:before {
+  content: "\e696";
+}
+
+.icon-24suoxiao:before {
+  content: "\e697";
+}
+
+.icon-a-xuanzhuanmianban-rotatepanel-anti:before {
+  content: "\e621";
+}
+
+.icon-a-xuanzhuanmianban-rotatepanel:before {
+  content: "\e622";
+}
+
+.icon-light-bulb:before {
+  content: "\e617";
+}
+
+.icon-dome-light:before {
+  content: "\e694";
+}
+
+.icon-light-bulb-copy:before {
+  content: "\eac5";
+}
+
+.icon-dome-light-copy:before {
+  content: "\eac6";
+}
+
+.icon-dark1:before {
+  content: "\e6a9";
+}
+
+.icon-dark1-copy:before {
+  content: "\eac7";
 }
 
 .icon-xiazai:before {
