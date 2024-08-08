@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { useAppSelector, useAppDispatch } from '@/store/hooks'
 import { fetchReposContent, setContent } from '@/store/repository'
-import { setBase, setEntryPath, setTheme } from '@/store/config'
+import { setBase, setEntryPath, setTheme, setCollapsed } from '@/store/config'
 import { ReposContent, User } from '@/api/interface'
 import styles from './header.module.scss'
 
@@ -27,17 +27,23 @@ export default function Header() {
         <i className="iconfont"></i>
         <span>Cloud Image</span>
       </h1>
-      <ul className={styles.nav}>
-        {entryPath.map((path, index) => (
-          <li
-            key={index}
-            className={styles['nav-item']}
-            onClick={() => handleQueryPath(index)}
-          >
-            {path}
-          </li>
-        ))}
-      </ul>
+      <div className={styles.nav}>
+        <span
+          className={`iconfont icon-zhedie ${styles.collapsed}`}
+          onClick={() => dispath(setCollapsed())}
+        ></span>
+        <ul className={styles['path-nav']}>
+          {entryPath.map((path, index) => (
+            <li
+              key={index}
+              className={styles['path-nav-item']}
+              onClick={() => handleQueryPath(index)}
+            >
+              {path}
+            </li>
+          ))}
+        </ul>
+      </div>
       <div className={styles.actions}>
         <i
           className="iconfont icon-dark"

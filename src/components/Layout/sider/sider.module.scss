@@ -2,7 +2,19 @@
   color: rgb(var(--foreground));
   background-color: rgb(var(--background));
   border-right-color: rgb(var(--border-style));
-  @apply flex flex-col w-64 h-full border-r text-sm;
+  @apply flex flex-col w-64 h-full border-r text-sm duration-200;
+  &.mobile,
+  &.collapsed-true {
+    @apply absolute top-0 left-0 z-50;
+  }
+  &.mobile:not(.collapsed-true):after {
+    content: "";
+    background-color: rgba(0, 0, 0, 0.2);
+    @apply absolute top-0 left-0 w-screen h-screen;
+  }
+  &.collapsed-true {
+    transform: translateX(-100%);
+  }
   .dir-item {
     &.hovered {
       &:hover {

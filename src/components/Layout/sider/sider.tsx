@@ -9,7 +9,9 @@ import styles from './sider.module.scss'
 
 export default function Sider() {
   const dispath = useAppDispatch()
-  const { base, entryPath } = useAppSelector((store) => store.config)
+  const { isMobile, isCollapsed, base } = useAppSelector(
+    (store) => store.config
+  )
   const { content } = useAppSelector((store) => store.repository)
 
   const imgPopElm = useRef<UploadImgPopEmitEvent>(null)
@@ -48,7 +50,11 @@ export default function Sider() {
   }, [content])
 
   return (
-    <nav className={styles.nav}>
+    <nav
+      className={`${styles.nav} ${isMobile ? styles.mobile : ''} ${
+        isCollapsed ? styles['collapsed-true'] : styles['collapsed-false']
+      }`}
+    >
       <div className="px-2.5 pt-5 pb-2.5">
         <input
           defaultValue={base}

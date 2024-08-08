@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { getDevice } from '@/utils'
 import { BASE_PATH } from '@/utils/const'
 
 export interface InitialState {
@@ -12,9 +13,9 @@ export interface InitialState {
 export type ContentAction = 'replace' | 'push'
 
 export const initialState: InitialState = {
-  isMobile: false,
+  isMobile: !!getDevice(),
   theme: 'dark',
-  isCollapsed: false,
+  isCollapsed: !!getDevice(),
   base: BASE_PATH,
   entryPath: [BASE_PATH],
 }
@@ -25,12 +26,6 @@ export const configSlice = createSlice({
   reducers: {
     setIsMobile: (state, { payload }: PayloadAction<boolean>) => {
       state.isMobile = payload
-    },
-    setConfig: (state, { payload }: PayloadAction<InitialState>) => {
-      state = {
-        ...state,
-        ...payload,
-      }
     },
     setTheme: (state) => {
       state.theme = state.theme === 'dark' ? 'light' : 'dark'
@@ -61,13 +56,7 @@ export const configSlice = createSlice({
   },
 })
 
-export const {
-  setIsMobile,
-  setConfig,
-  setTheme,
-  setCollapsed,
-  setBase,
-  setEntryPath,
-} = configSlice.actions
+export const { setIsMobile, setTheme, setCollapsed, setBase, setEntryPath } =
+  configSlice.actions
 
 export default configSlice.reducer

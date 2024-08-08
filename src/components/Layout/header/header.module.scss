@@ -8,10 +8,19 @@
   }
   .nav {
     color: rgb(var(--foreground));
-    @apply flex flex-nowrap gap-1 flex-1 px-2 truncate cursor-pointer text-sm;
-    .nav-item {
+    @apply flex flex-nowrap items-center flex-1 px-2;
+    .collapsed {
       &:hover {
         color: rgb(var(--foreground-active));
+      }
+      @apply pr-4 text-2xl cursor-pointer;
+    }
+    .path-nav {
+      @apply flex flex-nowrap gap-1 truncate cursor-pointer text-sm;
+      .path-nav-item {
+        &:hover {
+          color: rgb(var(--foreground-active));
+        }
       }
     }
   }
