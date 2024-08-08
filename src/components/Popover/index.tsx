@@ -36,7 +36,7 @@ export default function Popover({
 
   return (
     <div
-      className="fixed top-0 left-0 w-full h-full"
+      className="fixed top-0 left-0 z-50 w-full h-full"
       style={{
         display: status ? 'block' : 'none',
         backgroundColor: 'rgba(0, 0, 0, 0.3)',

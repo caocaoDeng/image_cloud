@@ -1,3 +1,4 @@
+import MobileDetect from 'mobile-detect'
 import { LOGKEY } from './const'
 
 // 读取文件，转base64
@@ -85,4 +86,10 @@ export const download = (url: string, name: string) => {
   tag_a.setAttribute('href', url)
   tag_a.setAttribute('download', name)
   tag_a.click()
+}
+
+// 判断设备
+export const getDevice = (): string | null => {
+  const md = new MobileDetect(navigator.userAgent)
+  return md.mobile()
 }
