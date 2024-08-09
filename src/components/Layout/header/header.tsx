@@ -36,14 +36,13 @@ export default function Header() {
     <header className={styles.header}>
       <h1 className={`${styles.title} ${isMobile ? styles.mobile : ''}`}>
         <i
-          className="iconfont icon-github mr-2 leading-none"
-          style={{ fontSize: 22 }}
+          className={`iconfont icon-github mr-2 leading-none ${styles.icon}`}
         ></i>
         <span className={isMobile ? 'hidden' : ''}>Cloud Image</span>
       </h1>
       <div className={styles.nav}>
         <span
-          className={`iconfont icon-zhedie ${styles.collapsed}`}
+          className={`iconfont icon-zhedie ${styles.collapsed} ${styles.icon}`}
           onClick={() => dispath(setCollapsed())}
         ></span>
         {isMobile ? (
@@ -71,16 +70,24 @@ export default function Header() {
       </div>
       <div className={styles.actions}>
         <i
-          className="iconfont icon-dark"
+          className={`iconfont icon-dark ${styles.icon} ${styles['theme-btn']}`}
           onClick={() => dispath(setTheme())}
         ></i>
-        <Image
-          className={styles.avatar}
-          src={userInfo?.avatar_url}
-          width={30}
-          height={30}
-          alt="avatar"
-        />
+        <div
+          className={`iconfont ${userInfo ? '' : 'icon-user'} ${styles.user}`}
+        >
+          {userInfo ? (
+            <Image
+              className="absolute inset-0"
+              src={userInfo.avatar_url}
+              width={32}
+              height={32}
+              alt="avatar"
+            />
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
     </header>
   )

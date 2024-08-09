@@ -2,9 +2,12 @@
   background-color: rgb(var(--background));
   border-bottom-color: rgb(var(--border-style));
   @apply flex shrink-0 h-16 items-center border-b;
+  .icon {
+    font-size: 24px;
+  }
   .title {
     color: rgb(var(--foreground-active));
-    @apply w-64 pl-2.5 text-xl font-semibold shrink-0;
+    @apply flex items-center w-64 pl-2.5 text-xl font-semibold shrink-0;
     &.mobile {
       @apply w-12;
     }
@@ -16,7 +19,7 @@
       &:hover {
         color: rgb(var(--foreground-active));
       }
-      @apply pr-4 text-2xl cursor-pointer;
+      @apply pr-4 cursor-pointer;
     }
     .path-nav {
       @apply flex flex-nowrap gap-1 truncate cursor-pointer text-sm;
@@ -29,9 +32,17 @@
   }
   .actions {
     @apply flex flex-nowrap items-center gap-2 pr-2.5;
-    i,.avatar {
-      color: rgb(var(--foreground-active));
-      @apply text-2xl cursor-pointer;
+    .theme-btn,
+    .user {
+      color: rgb(var(--foreground));
+      @apply leading-none cursor-pointer;
+      &:hover {
+        color: rgb(var(--foreground-active));
+      }
+    }
+    .user {
+      font-size: 32px;
+      @apply relative w-8 h-8;
     }
   }
 }
