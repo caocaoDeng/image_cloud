@@ -112,7 +112,9 @@ export default function ImageLazy({
           className="w-full h-full"
           {...rest}
           src={loadSrc}
-          loader={(img) => img.src}
+          loader={({ src, width, quality }) =>
+            `${src}?w=${width}&q=${quality || 75}`
+          }
         ></Image>
       )}
     </div>
