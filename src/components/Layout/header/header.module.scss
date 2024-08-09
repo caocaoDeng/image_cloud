@@ -5,6 +5,9 @@
   .title {
     color: rgb(var(--foreground-active));
     @apply w-64 pl-2.5 text-xl font-semibold shrink-0;
+    &.mobile {
+      @apply w-12;
+    }
   }
   .nav {
     color: rgb(var(--foreground));

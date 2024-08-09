@@ -10,8 +10,19 @@ export default function Header() {
   const userInfo = useAppSelector((store) => store.user.user) as User
   const { isMobile, entryPath } = useAppSelector((store) => store.config)
 
-  const handleQueryPath = async (index: number) => {
-    const updateEntryPath = entryPath.slice(0, index + 1)
+  // 返回上一级
+  const handleBack = async () => {
+    await dispath(
+      setEntryPath({ actionType: 'replace', entryPath: entryPath.slice(0, -1) })
+    )
+  }
+
+  const handleQueryPath = async (type: 'back' | 'appoint', index?: number) => {
+    if (entryPath.length === 1) return
+    const updateEntryPath =
+      type === 'appoint'
+        ? entryPath.slice(0, (index || 0) + 1)
+        : entryPath.slice(0, -1)
     await dispath(
       setEntryPath({ actionType: 'replace', entryPath: updateEntryPath })
     )
@@ -23,7 +34,7 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
-      <h1 className={`${styles.title} ${isMobile ? 'w-12' : ''}`}>
+      <h1 className={`${styles.title} ${isMobile ? styles.mobile : ''}`}>
         <i
           className="iconfont icon-github mr-2 leading-none"
           style={{ fontSize: 22 }}
@@ -35,17 +46,28 @@ export default function Header() {
           className={`iconfont icon-zhedie ${styles.collapsed}`}
           onClick={() => dispath(setCollapsed())}
         ></span>
-        <ul className={styles['path-nav']}>
-          {entryPath.map((path, index) => (
-            <li
-              key={index}
+        {isMobile ? (
+          <div className={styles['path-nav']}>
+            <span
               className={styles['path-nav-item']}
-              onClick={() => handleQueryPath(index)}
+              onClick={() => handleQueryPath('back')}
             >
-              {path}
-            </li>
-          ))}
-        </ul>
+              返回上一级
+            </span>
+          </div>
+        ) : (
+          <ul className={styles['path-nav']}>
+            {entryPath.map((path, index) => (
+              <li
+                key={index}
+                className={styles['path-nav-item']}
+                onClick={() => handleQueryPath('appoint', index)}
+              >
+                {path}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
       <div className={styles.actions}>
         <i
