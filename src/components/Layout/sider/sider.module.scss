@@ -2,18 +2,15 @@
   color: rgb(var(--foreground));
   background-color: rgb(var(--background));
   border-right-color: rgb(var(--border-style));
-  @apply flex flex-col w-64 h-full border-r text-sm duration-200;
+  @apply flex flex-col w-64 h-full border-r text-sm transition-all;
   &.mobile,
-  &.collapsed-true {
-    @apply absolute top-0 left-0 z-50;
+  &.collapsed {
+    @apply absolute top-0 left-0 z-50 -translate-x-full;
   }
-  &.mobile:not(.collapsed-true):after {
+  &.mobile:not(.collapsed):after {
     content: "";
     background-color: rgba(0, 0, 0, 0.2);
-    @apply absolute top-0 left-0 w-screen h-screen;
-  }
-  &.collapsed-true {
-    transform: translateX(-100%);
+    @apply absolute top-0 left-0 -z-10 w-screen h-screen;
   }
   .dir-item {
     &.hovered {

@@ -8,7 +8,7 @@ import styles from './header.module.scss'
 export default function Header() {
   const dispath = useAppDispatch()
   const userInfo = useAppSelector((store) => store.user.user) as User
-  const entryPath = useAppSelector((store) => store.config.entryPath)
+  const { isMobile, entryPath } = useAppSelector((store) => store.config)
 
   const handleQueryPath = async (index: number) => {
     const updateEntryPath = entryPath.slice(0, index + 1)
@@ -23,9 +23,12 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
-      <h1 className={styles.title}>
-        <i className="iconfont"></i>
-        <span>Cloud Image</span>
+      <h1 className={`${styles.title} ${isMobile ? 'w-12' : ''}`}>
+        <i
+          className="iconfont icon-github mr-2 leading-none"
+          style={{ fontSize: 22 }}
+        ></i>
+        <span className={isMobile ? 'hidden' : ''}>Cloud Image</span>
       </h1>
       <div className={styles.nav}>
         <span

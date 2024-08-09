@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useRef, useState } from 'react'
 import { fetchReposContent, setContent } from '@/store/repository'
 import { setBase, setEntryPath } from '@/store/config'
@@ -44,17 +46,19 @@ export default function Sider() {
     setLoading(false)
   }
 
+  const getClassName = (): string => {
+    const mobile = isMobile ? styles.mobile : ''
+    const collapsed = isCollapsed ? styles.collapsed : ''
+    return `${styles.nav} ${mobile} ${collapsed}`.trim()
+  }
+
   useEffect(() => {
     const dirData = content.filter(({ type }) => type === 'dir')
     setDir(dirData)
   }, [content])
 
   return (
-    <nav
-      className={`${styles.nav} ${isMobile ? styles.mobile : ''} ${
-        isCollapsed ? styles['collapsed-true'] : styles['collapsed-false']
-      }`}
-    >
+    <nav className={getClassName()}>
       <div className="px-2.5 pt-5 pb-2.5">
         <input
           defaultValue={base}
