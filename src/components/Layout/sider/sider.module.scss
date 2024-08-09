@@ -12,7 +12,6 @@
   }
   &.mobile:not(.collapsed):after {
     content: "";
-    background-color: rgba(0, 0, 0, 0.1);
     @apply absolute top-0 left-0 -z-10 w-screen h-screen;
   }
   .dir-item {

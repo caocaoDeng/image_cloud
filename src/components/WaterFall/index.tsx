@@ -1,5 +1,7 @@
 'use client'
+
 import { useEffect, useRef, useState } from 'react'
+import { useAppSelector } from '@/store/hooks'
 import { ExtendReposContent } from '@/app/page'
 import { download } from '@/utils/index'
 import ImageLazy from '../ImageLazy'
@@ -34,6 +36,8 @@ export default function WaterFall({
   gap: number
   data: ExtendReposContent[]
 }) {
+  const isMobile = useAppSelector((store) => store.config.isMobile)
+
   const wfContainerElm = useRef<HTMLDivElement>(null)
   const [value, setValue] = useState<ExtendReposContent[]>([])
   const [isPreview, setIsPreview] = useState<boolean>(false)
@@ -43,11 +47,11 @@ export default function WaterFall({
   /**
    * 获取基本信息
    * width 每一项的宽度，len 需要展示的列数
-   * @returns {width, leng}
+   * @returns {width, len}
    */
   const getInfo = (): { width: number; len: number } => {
     let { width = 0 } = wfContainerElm.current?.getBoundingClientRect() || {}
-    const count = Math.round(width / maxWidth)
+    const count = isMobile ? 2 : Math.round(width / maxWidth)
     width = (width - (count - 1) * gap) / count
     return {
       width: count === 1 && width < maxWidth ? maxWidth : width,
