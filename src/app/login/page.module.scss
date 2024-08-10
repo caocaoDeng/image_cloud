@@ -1,5 +1,5 @@
 .login {
-  background-color: rgb(var(--background));
+  background-image: linear-gradient(to left bottom, #21413f, #1c3636, #182c2d, #142223, #10191a, #0d1517, #091113, #050c0e, #060f11, #071115, #081317, #09151a);
   .button {
     background-color: rgb(var(--background));
     @apply hover:bg-black;

@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useAppDispatch } from '@/store/hooks'
 import { setAuthToken, fetchUserInfo, InitialState } from '@/store/user'
-import { useRouter } from 'next/navigation'
 import { USERINFO } from '@/utils/const'
 import styles from './page.module.scss'
 

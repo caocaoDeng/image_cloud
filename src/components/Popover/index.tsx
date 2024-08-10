@@ -47,7 +47,7 @@ export default function Popover({
         ref={popoverElm}
         popover="manual"
         className="rounded-lg"
-        style={{ width: '520px' }}
+        style={{ width: '32rem' }}
       >
         <header className="flex items-center justify-between px-4 py-3.5 border-b border-zinc-300">
           <h3 className="flex-1 font-medium truncate">{title}</h3>
