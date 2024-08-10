@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // 静态导出
+  output: 'export',
+  basePath: '/image_cloud',
+  distDir: 'build',
   images: {
     remotePatterns: [
       {
