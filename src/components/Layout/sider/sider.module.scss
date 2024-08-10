@@ -2,7 +2,7 @@
   color: rgb(var(--foreground));
   background-color: rgb(var(--background));
   border-right-color: rgb(var(--border-style));
-  @apply flex flex-col w-64 h-full border-r text-sm transition-all;
+  @apply flex flex-col w-64 h-full border-r text-sm;
   &.mobile,
   &.collapsed {
     @apply absolute top-0 left-0 z-50;

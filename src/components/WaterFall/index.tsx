@@ -36,7 +36,7 @@ export default function WaterFall({
   gap: number
   data: ExtendReposContent[]
 }) {
-  const isMobile = useAppSelector((store) => store.config.isMobile)
+  const { isCollapsed, isMobile } = useAppSelector((store) => store.config)
 
   const wfContainerElm = useRef<HTMLDivElement>(null)
   const [value, setValue] = useState<ExtendReposContent[]>([])
@@ -111,7 +111,7 @@ export default function WaterFall({
     return () => {
       window.removeEventListener('resize', updateData)
     }
-  }, [data])
+  }, [data, isCollapsed])
 
   return (
     <div className="relative w-full" ref={wfContainerElm}>
