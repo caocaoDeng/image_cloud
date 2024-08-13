@@ -5,6 +5,7 @@ const nextConfig = {
   basePath: '/image_cloud',
   distDir: 'build',
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         hostname: 'raw.githubusercontent.com',
@@ -14,6 +15,6 @@ const nextConfig = {
       },
     ],
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig

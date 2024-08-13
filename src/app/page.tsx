@@ -21,8 +21,8 @@ export type ExtendReposContent = ReposContent & ImageInfo
 
 export default function Home() {
   const dispatch = useAppDispatch()
-  const { content } = useAppSelector((store) => store.repository)
-  const theme = useAppSelector((store) => store.config.theme)
+  const { content } = useAppSelector(store => store.repository)
+  const theme = useAppSelector(store => store.config.theme)
 
   const [data, setData] = useState<ExtendReposContent[]>([])
 
@@ -89,7 +89,7 @@ export default function Home() {
     await readLogsFile()
     const imgList = content
       .filter(({ name, type }) => type === 'file' && name !== LOGFILENAME)
-      .map((item) => {
+      .map(item => {
         const { width = 200, height = 200 } = getGivenImageInfo(
           item.sha
         ) as ImageInfo
